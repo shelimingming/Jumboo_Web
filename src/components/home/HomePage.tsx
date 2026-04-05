@@ -98,6 +98,8 @@ export default function HomePage() {
       boundVideo.addEventListener("canplay", onMediaProgress);
       boundVideo.addEventListener("loadeddata", onMediaProgress);
       boundVideo.addEventListener("loadedmetadata", onMediaProgress);
+      // 微信等环境首次无用户手势时 play() 会失败，真正开始播放时才稳定有画面；补上 playing 避免一直不渐显
+      boundVideo.addEventListener("playing", onMediaProgress);
       boundVideo.addEventListener("error", () => {
         boundVideo.classList.remove("is-ready");
       });
@@ -108,6 +110,28 @@ export default function HomePage() {
     }
 
     reduceMotionMq.addEventListener("change", syncBgVideoPlayback);
+
+    // 微信首次打开：无手势时 autoplay 常被拦截，需在用户第一次触摸/点击时同步在同一手势栈里重试 play（点锚点链接也会触发）
+    let didUserActivateForBgVideo = false;
+    function onFirstUserGestureForBgVideo() {
+      if (didUserActivateForBgVideo) return;
+      didUserActivateForBgVideo = true;
+      document.removeEventListener("touchstart", onFirstUserGestureForBgVideo, true);
+      document.removeEventListener("click", onFirstUserGestureForBgVideo, true);
+      // 已有缓冲则先渐显，避免仅 play 被拦时长时间全透明
+      const v = bgVideoRef.current;
+      if (v && v.readyState >= 2) markVideoReady();
+      updateHeroInViewFromGeometry();
+    }
+    document.addEventListener("touchstart", onFirstUserGestureForBgVideo, {
+      capture: true,
+      passive: true,
+    });
+    document.addEventListener("click", onFirstUserGestureForBgVideo, { capture: true });
+
+    // 从后台/缓存返回时补一次同步（部分 WebView 会暂停媒体）
+    const onPageShow = () => updateHeroInViewFromGeometry();
+    window.addEventListener("pageshow", onPageShow);
 
     // 滚动/缩放时同步；首进页面再延迟几次纠偏（工具栏/首帧布局晚于 effect）
     window.addEventListener("scroll", updateHeroInViewFromGeometry, { passive: true });
@@ -121,10 +145,14 @@ export default function HomePage() {
     const tRearm2 = window.setTimeout(updateHeroInViewFromGeometry, 400);
 
     return () => {
+      document.removeEventListener("touchstart", onFirstUserGestureForBgVideo, true);
+      document.removeEventListener("click", onFirstUserGestureForBgVideo, true);
+      window.removeEventListener("pageshow", onPageShow);
       if (boundVideo) {
         boundVideo.removeEventListener("canplay", onMediaProgress);
         boundVideo.removeEventListener("loadeddata", onMediaProgress);
         boundVideo.removeEventListener("loadedmetadata", onMediaProgress);
+        boundVideo.removeEventListener("playing", onMediaProgress);
       }
       reduceMotionMq.removeEventListener("change", syncBgVideoPlayback);
       window.removeEventListener("scroll", updateHeroInViewFromGeometry);

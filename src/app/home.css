@@ -1214,15 +1214,14 @@ h2 {
   text-decoration: none;
   color: var(--slate);
   background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(255,255,255,1);
+  /* 去掉纯白描边，避免与按钮底色叠成「双层花边」感 */
+  border: none;
   border-radius: 100px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   transition: all 0.5s var(--ease-spring);
-  box-shadow: 
-    0 10px 30px rgba(162, 178, 194, 0.2),
-    inset 0 -3px 0 rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(162, 178, 194, 0.2);
   z-index: 1;
 }
 
