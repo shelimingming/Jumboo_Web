@@ -203,20 +203,15 @@ export default function HomePage() {
             <h2 id="works-title" className="reveal delay-1">
               个人作品
             </h2>
-            <p
-              className="reveal delay-2"
-              style={{ color: "rgba(74, 93, 96, 0.8)", fontSize: "1.1rem" }}
-            >
-              点击卡片进入播放页（预览中为占位链接，接入正式路由后替换即可）。
-            </p>
           </div>
           <div className="works-grid">
             <WorkCard
               id="1"
               delayClass="delay-1"
-              coverClass="cover-1"
-              title="雾岛日出"
-              subtitle="实验短片 · 2025"
+              coverClass="cover-photo"
+              title="年糕的演奏"
+              subtitle="一曲琴音，寄往心底最深的思念"
+              coverImage="/年糕的演奏.jpeg"
             />
             <WorkCard
               id="2"
@@ -297,15 +292,21 @@ function WorkCard(props: {
   coverClass: string;
   title: string;
   subtitle: string;
+  /** 可选：public 下的封面图路径，如 /年糕的演奏.jpeg */
+  coverImage?: string;
 }) {
-  const { id, delayClass, coverClass, title, subtitle } = props;
+  const { id, delayClass, coverClass, title, subtitle, coverImage } = props;
+
+  const cardClass = `work-card ${coverClass} reveal ${delayClass}`;
+  // 行内 url()：路径含中文时用 encodeURI，避免个别环境下样式解析异常
+  const coverInnerStyle = coverImage
+    ? { backgroundImage: `url("${encodeURI(coverImage)}")` }
+    : undefined;
+
   return (
-    <Link
-      className={`work-card ${coverClass} reveal ${delayClass}`}
-      href={`/play?id=${id}`}
-    >
+    <Link className={cardClass} href={`/play?id=${id}`}>
       <div className="work-cover">
-        <div className="work-cover-inner" />
+        <div className="work-cover-inner" style={coverInnerStyle} />
         <span className="work-play" aria-hidden>
           <svg viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z" />

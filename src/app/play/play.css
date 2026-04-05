@@ -68,6 +68,43 @@
   pointer-events: none;
 }
 
+/* 嵌入抖音官方 iframe：铺满舞台，去掉装饰遮罩以免挡画面 */
+.play-stage--embed {
+  display: block;
+  padding: 0;
+  background: #0c0c0c;
+}
+
+.play-stage--embed::after {
+  display: none;
+}
+
+.play-douyin-iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* 嵌入失败时的备用入口（抖音策略或浏览器限制时常见） */
+.play-embed-fallback {
+  margin: 0.65rem 0 0;
+  width: min(100%, 880px);
+  text-align: center;
+  font-family: var(--font-sora), sans-serif;
+  font-size: 0.78rem;
+}
+
+.play-embed-fallback-link {
+  color: rgba(42, 51, 53, 0.55);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.play-embed-fallback-link:hover {
+  color: var(--slate-play);
+}
+
 .play-placeholder {
   font-family: var(--font-sora), sans-serif;
   font-size: 0.85rem;
@@ -84,6 +121,16 @@
   font-size: 1.35rem;
   margin: 1.5rem 0 0.35rem;
   color: var(--slate-play);
+}
+
+/* 作品备注（与首页卡片副标题一致） */
+.play-note {
+  margin: 0 0 0.5rem;
+  max-width: 28rem;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: rgba(42, 51, 53, 0.72);
 }
 
 .play-id-tag {

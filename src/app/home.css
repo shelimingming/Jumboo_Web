@@ -534,6 +534,11 @@ h2 {
   transform: scale(1.1) rotate(1deg);
 }
 
+/* 真实图片封面：渐变由行内 background-image 覆盖，此处仅兜底底色 */
+.cover-photo .work-cover-inner {
+  background-color: rgba(244, 239, 230, 0.9);
+}
+
 /* 马卡龙色占位封面 */
 .cover-1 .work-cover-inner { background: linear-gradient(135deg, var(--macaron-blue), var(--macaron-pink)); }
 .cover-2 .work-cover-inner { background: linear-gradient(135deg, var(--macaron-purple), var(--macaron-green)); }
