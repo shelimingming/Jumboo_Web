@@ -306,7 +306,8 @@ body::-webkit-scrollbar { display: none; }
   font-family: var(--font-sora), sans-serif;
   font-weight: 400;
   font-size: clamp(3rem, 10vw, 5.5rem);
-  line-height: 1;
+  /* 略大于 1，避免与下行字母被父级/渐变裁切（原 line-height:1 会切掉字尾） */
+  line-height: 1.12;
   letter-spacing: -0.03em;
   margin: 0 0 1rem;
   color: var(--ink);
@@ -327,6 +328,9 @@ body::-webkit-scrollbar { display: none; }
   font-weight: 600;
   font-size: 0.45em;
   letter-spacing: 0.08em;
+  /* 斜体 + background-clip:text 时行高过紧会把字腹以下「横切」，单独放宽行框 */
+  line-height: 1.35;
+  padding-bottom: 0.12em;
   /* 略加深渐变两端，避免在浅背景上发虚 */
   background: linear-gradient(120deg, #e85a6b, #6b8fd4);
   -webkit-background-clip: text;
