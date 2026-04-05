@@ -63,10 +63,19 @@ export default function HomePage() {
       }
     }
 
+    // 用几何判断替代 IntersectionObserver：微信首次进入时 IO 常误报「不在视口」，导致一直 pause、首帧从不 play
+    function updateHeroInViewFromGeometry() {
+      if (!heroEl) return;
+      const r = heroEl.getBoundingClientRect();
+      const vh = window.innerHeight;
+      heroInViewRef.current = r.bottom > 1 && r.top < vh - 1;
+      syncBgVideoPlayback();
+    }
+
     // 微信内置浏览器有时不触发 canplay，用 loadedmetadata / loadeddata 兜底显示（.is-ready 控制 opacity）
     const onMediaProgress = () => {
       markVideoReady();
-      syncBgVideoPlayback();
+      updateHeroInViewFromGeometry();
     };
 
     if (boundVideo) {
@@ -84,19 +93,16 @@ export default function HomePage() {
 
     reduceMotionMq.addEventListener("change", syncBgVideoPlayback);
 
-    let observer: IntersectionObserver | undefined;
-    if (heroEl && typeof IntersectionObserver !== "undefined") {
-      observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            heroInViewRef.current = e.isIntersecting;
-            syncBgVideoPlayback();
-          });
-        },
-        { threshold: 0 }
-      );
-      observer.observe(heroEl);
-    }
+    // 滚动/缩放时同步；首进页面再延迟几次纠偏（工具栏/首帧布局晚于 effect）
+    window.addEventListener("scroll", updateHeroInViewFromGeometry, { passive: true });
+    window.addEventListener("resize", updateHeroInViewFromGeometry);
+    updateHeroInViewFromGeometry();
+    let raf2Id = 0;
+    const raf1Id = requestAnimationFrame(() => {
+      raf2Id = requestAnimationFrame(updateHeroInViewFromGeometry);
+    });
+    const tRearm1 = window.setTimeout(updateHeroInViewFromGeometry, 120);
+    const tRearm2 = window.setTimeout(updateHeroInViewFromGeometry, 400);
 
     return () => {
       if (boundVideo) {
@@ -105,7 +111,12 @@ export default function HomePage() {
         boundVideo.removeEventListener("loadedmetadata", onMediaProgress);
       }
       reduceMotionMq.removeEventListener("change", syncBgVideoPlayback);
-      observer?.disconnect();
+      window.removeEventListener("scroll", updateHeroInViewFromGeometry);
+      window.removeEventListener("resize", updateHeroInViewFromGeometry);
+      cancelAnimationFrame(raf1Id);
+      if (raf2Id) cancelAnimationFrame(raf2Id);
+      clearTimeout(tRearm1);
+      clearTimeout(tRearm2);
     };
   }, []);
 
@@ -195,13 +206,15 @@ export default function HomePage() {
           <div className="hero-inner">
             {/* 首屏个人介绍文案（用户定制） */}
             <span className="hero-tag">
-              AIGC创作者｜跨界新人 | 优质签约创作者
+              AIGC创作者｜跨界新人 | 抖音签约创作者
             </span>
             <h1 id="hero-title">
               阿布
               <span>Jumboo</span>
             </h1>
             <p className="hero-lead">
+              {/* 首屏三句自我介绍：连续展示为一组 */}
+              <span className="hero-lead-line">🌈嗨！很高兴认识你！这里是 ⬇️</span>
               <span className="hero-lead-line">
                 {`🌸有态度也有温度的AIGC创作者阿布✌︎' ֊'`}
               </span>
