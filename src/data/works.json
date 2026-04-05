@@ -22,27 +22,6 @@
       ]
     },
     {
-      "id": "other-works",
-      "titleZh": "其他作品",
-      "titleEn": "Other Works",
-      "works": [
-        {
-          "id": "dongda-creative",
-          "title": "东大文创",
-          "subtitle": "复刻爆火全网的《喜鹊谋杀案》片头风格",
-          "coverClass": "cover-3",
-          "delayClass": "delay-1"
-        },
-        {
-          "id": "gemini-trailer",
-          "title": "双子星（预告）",
-          "subtitle": "25年7月作品，首个科幻作品，获联想「双子星·平行宇宙」新星奖",
-          "coverClass": "cover-4",
-          "delayClass": "delay-2"
-        }
-      ]
-    },
-    {
       "id": "commercial-films",
       "titleZh": "商业宣传作品",
       "titleEn": "Commercial Films",
@@ -112,14 +91,22 @@
           "title": "年糕的假期",
           "subtitle": "一场狗狗与春天的粉色之约",
           "coverClass": "cover-2",
-          "delayClass": "delay-2"
+          "delayClass": "delay-2",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/年糕的假期.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/年糕的colorwalk.mp4"
+          }
         },
         {
           "id": "ricecake-performance",
           "title": "年糕的演奏",
           "subtitle": "一曲琴音，寄托心底最深的思念",
           "coverClass": "cover-3",
-          "delayClass": "delay-3"
+          "delayClass": "delay-3",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/年糕的演奏.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/年糕的colorwalk.mp4"
+          }
         },
         {
           "id": "ricecake-dream",
@@ -133,6 +120,27 @@
           "title": "年糕的新朋友",
           "subtitle": "打破标签与偏见",
           "coverClass": "cover-1",
+          "delayClass": "delay-2"
+        }
+      ]
+    },
+    {
+      "id": "other-works",
+      "titleZh": "其他作品",
+      "titleEn": "Other Works",
+      "works": [
+        {
+          "id": "dongda-creative",
+          "title": "东大文创",
+          "subtitle": "复刻爆火全网的《喜鹊谋杀案》片头风格",
+          "coverClass": "cover-3",
+          "delayClass": "delay-1"
+        },
+        {
+          "id": "gemini-trailer",
+          "title": "双子星（预告）",
+          "subtitle": "25年7月作品，首个科幻作品，获联想「双子星·平行宇宙」新星奖",
+          "coverClass": "cover-4",
           "delayClass": "delay-2"
         }
       ]

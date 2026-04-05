@@ -1,0 +1,70 @@
+{
+  "items": [
+    {
+      "id": "snow-stride",
+      "titleZh": "雪中悍刀行",
+      "titleEn": "Sword Snow Stride",
+      "status": "nominated",
+      "categoryZh": "最佳视觉效果",
+      "categoryEn": "Best Visual Effects",
+      "orgLineZh": "金海鸥奖 · 2022",
+      "orgLineEn": "Golden Seagull · 2022",
+      "macaron": "pink"
+    },
+    {
+      "id": "home-coming",
+      "titleZh": "万里归途",
+      "titleEn": "Home Coming",
+      "status": "nominated",
+      "categoryZh": "最佳视觉效果",
+      "categoryEn": "Best Visual Effects",
+      "orgLineZh": "金海鸥奖 · 2022",
+      "orgLineEn": "Golden Seagull · 2022",
+      "macaron": "blue"
+    },
+    {
+      "id": "moon-man-seagull",
+      "titleZh": "独行月球",
+      "titleEn": "Moon Man",
+      "status": "nominated",
+      "categoryZh": "最佳视觉效果",
+      "categoryEn": "Best Visual Effects",
+      "orgLineZh": "金海鸥奖 · 2022",
+      "orgLineEn": "Golden Seagull · 2022",
+      "macaron": "yellow"
+    },
+    {
+      "id": "moon-man-afa",
+      "titleZh": "独行月球",
+      "titleEn": "Moon Man",
+      "status": "won",
+      "categoryZh": "最佳视觉效果",
+      "categoryEn": "Best Visual Effects",
+      "orgLineZh": "第16届亚洲电影大奖 · 2022",
+      "orgLineEn": "16th Asian Film Awards · 2022",
+      "macaron": "purple"
+    },
+    {
+      "id": "writers-odyssey-vfx-sup",
+      "titleZh": "刺杀小说家",
+      "titleEn": "A Writer's Odyssey",
+      "status": "won",
+      "categoryZh": "最佳视效总监",
+      "categoryEn": "Best Visual Effects Supervisor",
+      "orgLineZh": "金海鸥奖 · 2021",
+      "orgLineEn": "Golden Seagull · 2021",
+      "macaron": "green"
+    },
+    {
+      "id": "writers-odyssey-tech",
+      "titleZh": "刺杀小说家",
+      "titleEn": "A Writer's Odyssey",
+      "status": "won",
+      "categoryZh": "杰出技术贡献",
+      "categoryEn": "Outstanding Technical Contributor",
+      "orgLineZh": "金海鸥奖 · 2021",
+      "orgLineEn": "Golden Seagull · 2021",
+      "macaron": "coral"
+    }
+  ]
+}

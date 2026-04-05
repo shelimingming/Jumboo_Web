@@ -22,7 +22,8 @@ export function WorkCard(props: {
     onPlay,
   } = props;
 
-  const cardClass = `work-card ${coverClass} reveal ${delayClass}`;
+  // 有外链封面图时加标记类，便于 CSS 用 contain 完整展示（避免 cover + 负 inset 裁切）
+  const cardClass = `work-card ${coverClass} reveal ${delayClass}${coverImage ? " work-card--cover-image" : ""}`;
   const coverInnerStyle = coverImage
     ? { backgroundImage: `url("${encodeURI(coverImage)}")` }
     : undefined;

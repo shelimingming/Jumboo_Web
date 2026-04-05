@@ -4,8 +4,13 @@ import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { WorkPlayerConfig } from "@/lib/worksConfig";
 import { portfolioCategories } from "@/lib/worksConfig";
+import honorsData from "@/data/honors.json";
+import { HonorBadge, type HonorItem } from "./HonorBadge";
 import { WorkCard } from "./WorkCard";
 import { WorkVideoLightbox } from "./WorkVideoLightbox";
+
+/** 荣誉卡片 reveal 交错延迟（与作品区 delay-1～4 一致） */
+const HONOR_REVEAL_DELAYS = ["delay-1", "delay-2", "delay-3", "delay-4"] as const;
 
 /** 微信 Android X5 内核：声明 H5 内联播放，避免视频走系统全屏层导致背景层「看不见」 */
 const WECHAT_X5_VIDEO_PROPS = {
@@ -201,6 +206,9 @@ export default function HomePage() {
               <a href="#works">作品</a>
             </li>
             <li>
+              <a href="#honors">荣誉</a>
+            </li>
+            <li>
               <a href="#coop">合作</a>
             </li>
           </ul>
@@ -293,8 +301,7 @@ export default function HomePage() {
                   className={`works-category-tab${activeWorkCategory === cat.id ? " is-active" : ""}`}
                   onClick={() => setActiveWorkCategory(cat.id)}
                 >
-                  <span className="works-category-tab-zh">{cat.titleZh}</span>
-                  <span className="works-category-tab-en">{cat.titleEn}</span>
+                  {cat.titleZh}
                 </button>
               ))}
             </div>
@@ -337,6 +344,28 @@ export default function HomePage() {
               </div>
             );
           })}
+        </section>
+
+        {/* 合作区之前：影视类荣誉小记（数据见 src/data/honors.json） */}
+        <section id="honors" className="honors" aria-labelledby="honors-title">
+          <div className="honors-head">
+            <p className="section-label reveal">Honors</p>
+            <h2 id="honors-title" className="reveal delay-1">
+              荣誉小记
+            </h2>
+            <p className="honors-lead reveal delay-2">
+              过往参与院线项目的奖项与提名记录，与当下 AIGC 创作并行的一小段足迹。
+            </p>
+          </div>
+          <div className="honors-grid">
+            {(honorsData.items as HonorItem[]).map((item, i) => (
+              <HonorBadge
+                key={item.id}
+                item={item}
+                delayClass={HONOR_REVEAL_DELAYS[i % HONOR_REVEAL_DELAYS.length]}
+              />
+            ))}
+          </div>
         </section>
 
         <section id="coop" className="coop" aria-labelledby="coop-title">

@@ -501,8 +501,8 @@ h2 {
   font-family: var(--font-sora), sans-serif;
   font-size: 0.78rem;
   letter-spacing: 0.04em;
-  text-align: left;
-  padding: 0.55rem 0.95rem;
+  text-align: center;
+  padding: 0.55rem 1rem;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.65);
   background: rgba(255, 255, 255, 0.35);
@@ -514,6 +514,11 @@ h2 {
     box-shadow 0.35s var(--ease-out-expo);
   backdrop-filter: blur(10px);
   line-height: 1.35;
+  /* 单行 Tab 也保持胶囊比例，避免「全部」被拉成正圆 */
+  min-height: 2.65rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .works-category-tab:hover {
@@ -525,25 +530,6 @@ h2 {
   background: rgba(255, 255, 255, 0.72);
   border-color: rgba(255, 168, 168, 0.45);
   box-shadow: 0 6px 24px var(--shadow-soft);
-}
-
-.works-category-tab-en {
-  display: block;
-  font-size: 0.68rem;
-  font-weight: 400;
-  letter-spacing: 0.06em;
-  text-transform: none;
-  opacity: 0.82;
-  margin-top: 0.12rem;
-}
-
-.works-category-tab:not(.is-active) .works-category-tab-en {
-  opacity: 0.72;
-}
-
-/* 「全部」仅一行 */
-.works-category-tab:first-child .works-category-tab-en {
-  display: none;
 }
 
 .works-category-block {
@@ -638,16 +624,30 @@ h2 {
   transform: scale(1.1) rotate(1deg);
 }
 
-/* 真实图片封面：渐变由行内 background-image 覆盖，此处仅兜底底色 */
-.cover-photo .work-cover-inner {
-  background-color: rgba(244, 239, 230, 0.9);
-}
-
 /* 马卡龙色占位封面 */
 .cover-1 .work-cover-inner { background: linear-gradient(135deg, var(--macaron-blue), var(--macaron-pink)); }
 .cover-2 .work-cover-inner { background: linear-gradient(135deg, var(--macaron-purple), var(--macaron-green)); }
 .cover-3 .work-cover-inner { background: linear-gradient(135deg, var(--macaron-yellow), var(--macaron-blue)); }
 .cover-4 .work-cover-inner { background: linear-gradient(135deg, var(--macaron-pink), var(--macaron-yellow)); }
+
+/* 真实封面图：须写在 .cover-N 之后，否则 background 简写会冲掉 contain（有图时 coverClass 常为 cover-2 等） */
+.work-card--cover-image .work-cover-inner {
+  inset: 0;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: rgba(244, 239, 230, 0.9);
+}
+
+/* 图片封面 hover 略收敛缩放，减少 contain 模式下边角被圆角裁掉的感觉 */
+.work-card--cover-image:hover .work-cover-inner {
+  transform: scale(1.04) rotate(0deg);
+}
+
+/* 仅作语义类时的衬底（与上图一致） */
+.cover-photo .work-cover-inner {
+  background-color: rgba(244, 239, 230, 0.9);
+}
 
 /* 播放按钮 */
 .work-play {
@@ -893,6 +893,181 @@ h2 {
   line-height: 1.55;
   color: rgba(74, 93, 96, 0.78);
   text-align: center;
+}
+
+/* --- 荣誉小记（合作区之前）：月桂环 + 马卡龙强调色，与作品/合作区宽度对齐 --- */
+.honors {
+  max-width: 76rem;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* 极淡点阵底纹，贴近示意稿的网格感且不抢马卡龙主调 */
+.honors::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(74, 93, 96, 0.055) 1px, transparent 1px);
+  background-size: 11px 11px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+}
+
+.honors-head,
+.honors-grid {
+  position: relative;
+  z-index: 1;
+}
+
+.honors-head {
+  margin-bottom: clamp(2.25rem, 5vw, 3rem);
+}
+
+.honors-lead {
+  max-width: min(42rem, 100%);
+  margin: 0.5rem 0 0;
+  font-family: var(--font-literata), "Songti SC", "Noto Serif SC", serif;
+  font-size: clamp(1rem, 2vw, 1.08rem);
+  line-height: 1.65;
+  letter-spacing: 0.02em;
+  color: rgba(74, 93, 96, 0.82);
+}
+
+.honors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(172px, 1fr));
+  gap: clamp(1rem, 2.2vw, 1.35rem);
+}
+
+@media (max-width: 420px) {
+  .honors-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.honor-badge {
+  /* 默认强调色；具体项由 data-macaron 覆盖 */
+  --honor-accent: color-mix(in srgb, var(--macaron-coral) 48%, var(--slate));
+}
+
+.honor-badge[data-macaron="pink"] {
+  --honor-accent: color-mix(in srgb, var(--macaron-pink) 40%, var(--slate));
+}
+
+.honor-badge[data-macaron="blue"] {
+  --honor-accent: color-mix(in srgb, var(--macaron-blue) 38%, var(--slate));
+}
+
+.honor-badge[data-macaron="yellow"] {
+  --honor-accent: color-mix(in srgb, var(--macaron-yellow) 36%, var(--slate));
+}
+
+.honor-badge[data-macaron="purple"] {
+  --honor-accent: color-mix(in srgb, var(--macaron-purple) 40%, var(--slate));
+}
+
+.honor-badge[data-macaron="green"] {
+  --honor-accent: color-mix(in srgb, var(--macaron-green) 38%, var(--slate));
+}
+
+.honor-badge[data-macaron="coral"] {
+  --honor-accent: color-mix(in srgb, var(--macaron-coral) 42%, var(--slate));
+}
+
+.honor-badge-inner {
+  height: 100%;
+  padding: 1rem 0.4rem 1.15rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.36);
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 12px 32px var(--shadow-soft);
+  transition:
+    transform 0.55s var(--ease-spring),
+    box-shadow 0.5s var(--ease-out-expo),
+    border-color 0.45s var(--ease-out-expo);
+}
+
+.honor-badge:hover .honor-badge-inner {
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 18px 44px rgba(74, 93, 96, 0.11);
+}
+
+.honor-badge-copy {
+  text-align: center;
+  padding: 0 0.35rem;
+}
+
+.honor-title {
+  font-family: var(--font-sora), sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.82rem, 1.9vw, 0.95rem);
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  margin: 0;
+  color: var(--slate);
+}
+
+.honor-title-en {
+  margin: 0.2rem 0 0;
+  font-family: var(--font-sora), sans-serif;
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  color: rgba(74, 93, 96, 0.55);
+}
+
+.honor-status {
+  margin: 0.45rem 0 0;
+  font-family: var(--font-sora), sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--honor-accent);
+}
+
+.honor-category {
+  margin: 0.28rem 0 0;
+  font-family: var(--font-literata), "Songti SC", "Noto Serif SC", serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: rgba(42, 51, 53, 0.88);
+}
+
+.honor-category-en {
+  margin: 0.12rem 0 0;
+  font-family: var(--font-sora), sans-serif;
+  font-size: 0.58rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  color: rgba(74, 93, 96, 0.62);
+}
+
+.honor-org {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-literata), "Songti SC", "Noto Serif SC", serif;
+  font-size: 0.62rem;
+  line-height: 1.4;
+  color: rgba(74, 93, 96, 0.72);
+}
+
+.honor-org-en {
+  margin: 0.1rem 0 0;
+  font-family: var(--font-sora), sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.03em;
+  line-height: 1.35;
+  color: rgba(74, 93, 96, 0.58);
 }
 
 /* --- 合作区块：与 .works-head 同宽、左对齐，和作品区纵向边线一致 --- */
