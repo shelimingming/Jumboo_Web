@@ -168,7 +168,11 @@ export default function HomePage() {
               playsInline
               preload="auto"
             >
-              <source src="/back.mp4" type="video/mp4" />
+              {/* 背景视频走 CDN，减轻源站压力并利于微信等环境稳定拉流 */}
+              <source
+                src="https://cdn.xyfit.top/Jumboo/back.mp4"
+                type="video/mp4"
+              />
             </video>
             <div className="bg-video-blend" />
           </div>
