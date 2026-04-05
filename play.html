@@ -91,13 +91,9 @@
       // 根据 URL 参数展示标题（预览用，正式站可改为接口数据）
       var params = new URLSearchParams(location.search);
       var id = params.get("id") || "1";
-      var titles = {
-        "1": "雾岛日出",
-        "2": "几何回信",
-        "3": "沉默的拱门",
-        "4": "褪色塔楼"
-      };
-      document.getElementById("title").textContent = titles[id] || "作品";
+      // 作品数据已清空，重新上传后在对象中补回 id -> 标题
+      var titles = {};
+      document.getElementById("title").textContent = titles[id] || "暂无上架作品";
       document.getElementById("meta").textContent = "作品 ID: " + id + " · Preview";
     })();
   </script>

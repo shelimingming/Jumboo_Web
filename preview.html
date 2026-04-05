@@ -488,6 +488,16 @@
       gap: clamp(2rem, 4vw, 3rem);
     }
 
+    /* 作品区暂无条目时的占位文案 */
+    .works-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: rgba(74, 93, 96, 0.78);
+      font-size: 1.05rem;
+      padding: 2.5rem 1rem;
+      margin: 0;
+    }
+
     .work-card {
       display: block;
       text-decoration: none;
@@ -772,54 +782,7 @@
         <h2 id="works-title" class="reveal delay-1">个人作品</h2>
       </div>
       <div class="works-grid">
-        <a class="work-card cover-1 reveal delay-1" href="play.html?id=1">
-          <div class="work-cover">
-            <div class="work-cover-inner"></div>
-            <span class="work-play" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </span>
-          </div>
-          <div class="work-meta">
-            <h3>雾岛日出</h3>
-            <p>实验短片 · 2025</p>
-          </div>
-        </a>
-        <a class="work-card cover-2 reveal delay-2" href="play.html?id=2">
-          <div class="work-cover">
-            <div class="work-cover-inner"></div>
-            <span class="work-play" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </span>
-          </div>
-          <div class="work-meta">
-            <h3>几何回信</h3>
-            <p>品牌概念片 · 2025</p>
-          </div>
-        </a>
-        <a class="work-card cover-3 reveal delay-3" href="play.html?id=3">
-          <div class="work-cover">
-            <div class="work-cover-inner"></div>
-            <span class="work-play" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </span>
-          </div>
-          <div class="work-meta">
-            <h3>沉默的拱门</h3>
-            <p>MV 片段 · 2024</p>
-          </div>
-        </a>
-        <a class="work-card cover-4 reveal delay-4" href="play.html?id=4">
-          <div class="work-cover">
-            <div class="work-cover-inner"></div>
-            <span class="work-play" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </span>
-          </div>
-          <div class="work-meta">
-            <h3>褪色塔楼</h3>
-            <p>艺术装置纪录 · 2024</p>
-          </div>
-        </a>
+        <p class="works-empty reveal delay-1">作品整理中，稍后更新。</p>
       </div>
     </section>
 

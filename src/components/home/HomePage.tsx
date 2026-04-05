@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useRef } from "react";
+import { WorkCard } from "./WorkCard";
 
 /** 首页：原 preview.html 的交互（视频、粒子、导航与 reveal）迁到客户端组件 */
 export default function HomePage() {
@@ -209,30 +209,9 @@ export default function HomePage() {
               id="1"
               delayClass="delay-1"
               coverClass="cover-photo"
-              title="年糕的演奏"
-              subtitle="一曲琴音，寄往心底最深的思念"
-              coverImage="/年糕的演奏.jpeg"
-            />
-            <WorkCard
-              id="2"
-              delayClass="delay-2"
-              coverClass="cover-2"
-              title="几何回信"
-              subtitle="品牌概念片 · 2025"
-            />
-            <WorkCard
-              id="3"
-              delayClass="delay-3"
-              coverClass="cover-3"
-              title="沉默的拱门"
-              subtitle="MV 片段 · 2024"
-            />
-            <WorkCard
-              id="4"
-              delayClass="delay-4"
-              coverClass="cover-4"
-              title="褪色塔楼"
-              subtitle="艺术装置纪录 · 2024"
+              title="年糕的Color Walk"
+              subtitle="影像作品"
+              coverImage="https://cdn.xyfit.top/Jumboo/年糕的colorwalk.jpg"
             />
           </div>
         </section>
@@ -283,40 +262,5 @@ export default function HomePage() {
 
       <footer>© Jumboo 阿布 · Immersive Experience</footer>
     </>
-  );
-}
-
-function WorkCard(props: {
-  id: string;
-  delayClass: string;
-  coverClass: string;
-  title: string;
-  subtitle: string;
-  /** 可选：public 下的封面图路径，如 /年糕的演奏.jpeg */
-  coverImage?: string;
-}) {
-  const { id, delayClass, coverClass, title, subtitle, coverImage } = props;
-
-  const cardClass = `work-card ${coverClass} reveal ${delayClass}`;
-  // 行内 url()：路径含中文时用 encodeURI，避免个别环境下样式解析异常
-  const coverInnerStyle = coverImage
-    ? { backgroundImage: `url("${encodeURI(coverImage)}")` }
-    : undefined;
-
-  return (
-    <Link className={cardClass} href={`/play?id=${id}`}>
-      <div className="work-cover">
-        <div className="work-cover-inner" style={coverInnerStyle} />
-        <span className="work-play" aria-hidden>
-          <svg viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        </span>
-      </div>
-      <div className="work-meta">
-        <h3>{title}</h3>
-        <p>{subtitle}</p>
-      </div>
-    </Link>
   );
 }
