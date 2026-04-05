@@ -1,0 +1,141 @@
+{
+  "categories": [
+    {
+      "id": "narrative-shorts",
+      "titleZh": "长叙事短片",
+      "titleEn": "Narrative Shorts",
+      "works": [
+        {
+          "id": "soul-terracotta",
+          "title": "俑魂",
+          "subtitle": "25年9月作品，B站「AI影响征集大赛」获奖作品，全网播放量破20w+",
+          "coverClass": "cover-1",
+          "delayClass": "delay-1"
+        },
+        {
+          "id": "alhambra-memories",
+          "title": "阿尔罕布拉宫的回忆",
+          "subtitle": "25年8月作品，爱奇艺「与AI共生」大赛获奖作品，原创剧本杀作品改编",
+          "coverClass": "cover-2",
+          "delayClass": "delay-2"
+        }
+      ]
+    },
+    {
+      "id": "other-works",
+      "titleZh": "其他作品",
+      "titleEn": "Other Works",
+      "works": [
+        {
+          "id": "dongda-creative",
+          "title": "东大文创",
+          "subtitle": "复刻爆火全网的《喜鹊谋杀案》片头风格",
+          "coverClass": "cover-3",
+          "delayClass": "delay-1"
+        },
+        {
+          "id": "gemini-trailer",
+          "title": "双子星（预告）",
+          "subtitle": "25年7月作品，首个科幻作品，获联想「双子星·平行宇宙」新星奖",
+          "coverClass": "cover-4",
+          "delayClass": "delay-2"
+        }
+      ]
+    },
+    {
+      "id": "commercial-films",
+      "titleZh": "商业宣传作品",
+      "titleEn": "Commercial Films",
+      "works": [
+        {
+          "id": "yangzhou-iqiyi-park",
+          "title": "扬州爱奇艺乐园",
+          "subtitle": "参与爱奇艺尖叫之夜，官号首页宣传，粉丝增长100%+",
+          "coverClass": "cover-1",
+          "delayClass": "delay-1"
+        },
+        {
+          "id": "yiner-30",
+          "title": "YINER 30周年「自然之序」",
+          "subtitle": "音儿三十周年系列推广，品牌首个100%AI宣传视频",
+          "coverClass": "cover-2",
+          "delayClass": "delay-2"
+        },
+        {
+          "id": "cloud-in-heart",
+          "title": "我心中的那朵云",
+          "subtitle": "爱奇艺全员大会加油视频",
+          "coverClass": "cover-3",
+          "delayClass": "delay-3"
+        }
+      ]
+    },
+    {
+      "id": "short-dramas",
+      "titleZh": "精品短剧",
+      "titleEn": "Short Dramas",
+      "works": [
+        {
+          "id": "victor-trailer",
+          "title": "维克多（预告）",
+          "subtitle": "两天沉浸式体验暗夜逆袭！剧本、分镜、视频、配音全AI制作！",
+          "coverClass": "cover-4",
+          "delayClass": "delay-1"
+        },
+        {
+          "id": "cinderella-clip",
+          "title": "辛德瑞拉嫁错郎（切片）",
+          "subtitle": "首个参与制作的出海短剧项目，TikTok即将上线",
+          "coverClass": "cover-1",
+          "delayClass": "delay-2"
+        }
+      ]
+    },
+    {
+      "id": "original-healing",
+      "titleZh": "原创治愈系列",
+      "titleEn": "Original Healing Series",
+      "works": [
+        {
+          "id": "ricecake-colorwalk",
+          "title": "年糕的color walk",
+          "subtitle": "做不被定义的那朵花",
+          "coverClass": "cover-photo",
+          "delayClass": "delay-1",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/年糕的colorwalk.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/年糕的colorwalk.mp4"
+          }
+        },
+        {
+          "id": "ricecake-vacation",
+          "title": "年糕的假期",
+          "subtitle": "一场狗狗与春天的粉色之约",
+          "coverClass": "cover-2",
+          "delayClass": "delay-2"
+        },
+        {
+          "id": "ricecake-performance",
+          "title": "年糕的演奏",
+          "subtitle": "一曲琴音，寄托心底最深的思念",
+          "coverClass": "cover-3",
+          "delayClass": "delay-3"
+        },
+        {
+          "id": "ricecake-dream",
+          "title": "年糕的梦",
+          "subtitle": "抖音官方邀约作品",
+          "coverClass": "cover-4",
+          "delayClass": "delay-1"
+        },
+        {
+          "id": "ricecake-new-friend",
+          "title": "年糕的新朋友",
+          "subtitle": "打破标签与偏见",
+          "coverClass": "cover-1",
+          "delayClass": "delay-2"
+        }
+      ]
+    }
+  ]
+}

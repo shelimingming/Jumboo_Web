@@ -1,7 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import Image from "next/image";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { WorkPlayerConfig } from "@/lib/worksConfig";
+import { portfolioCategories } from "@/lib/worksConfig";
 import { WorkCard } from "./WorkCard";
+import { WorkVideoLightbox } from "./WorkVideoLightbox";
 
 /** 微信 Android X5 内核：声明 H5 内联播放，避免视频走系统全屏层导致背景层「看不见」 */
 const WECHAT_X5_VIDEO_PROPS = {
@@ -16,6 +20,13 @@ export default function HomePage() {
   const bgVideoRef = useRef<HTMLVideoElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const navRef = useRef<HTMLElement>(null);
+  /** 作品集分类筛选：全部 | 某一分类 id */
+  const [activeWorkCategory, setActiveWorkCategory] = useState<string>("all");
+  /** 首页灯箱播放：取消跳转 /play，视频在当前页打开 */
+  const [lightbox, setLightbox] = useState<{
+    title: string;
+    player: WorkPlayerConfig;
+  } | null>(null);
 
   // 用 ref 记录首屏是否在视口内，避免 setState 触发 effect 重建 Observer
   const heroInViewRef = useRef(true);
@@ -147,6 +158,20 @@ export default function HomePage() {
     };
   }, []);
 
+  // 切换作品分类后，对已展开区块内的 .reveal 做一次视口检测，避免仅 display 切换时不触发 IntersectionObserver
+  useEffect(() => {
+    function revealWorksInView() {
+      document.querySelectorAll("#works .reveal").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const vh = window.innerHeight;
+        if (r.bottom > 0 && r.top < vh * 0.92) el.classList.add("visible");
+      });
+    }
+    revealWorksInView();
+    const id = requestAnimationFrame(revealWorksInView);
+    return () => cancelAnimationFrame(id);
+  }, [activeWorkCategory]);
+
   return (
     <>
       <div className="mesh-background" aria-hidden />
@@ -209,17 +234,26 @@ export default function HomePage() {
               AIGC创作者｜跨界新人 | 抖音签约创作者
             </span>
             <h1 id="hero-title">
-              阿布
+              {/* 首屏中文署名：使用透明底设计字图片（public/name.jpg） */}
+              <Image
+                src="/name.jpg"
+                alt="平平无奇的阿布"
+                className="hero-name-logo"
+                width={2944}
+                height={1176}
+                sizes="(max-width: 640px) 92vw, 520px"
+                priority
+              />
               <span>Jumboo</span>
             </h1>
             <p className="hero-lead">
               {/* 首屏三句自我介绍：连续展示为一组 */}
-              <span className="hero-lead-line">🌈嗨！很高兴认识你！这里是 ⬇️</span>
+              <span className="hero-lead-line">嗨！很高兴认识你！这里是</span>
               <span className="hero-lead-line">
-                {`🌸有态度也有温度的AIGC创作者阿布✌︎' ֊'`}
+                {`有态度也有温度的AIGC创作者阿布✌︎' ֊'`}
               </span>
               <span className="hero-lead-line">
-                🤗一个时I时E、时T时F的非典型ENTJ~
+                一个时I时E、时T时F的非典型ENTJ~
               </span>
             </p>
           </div>
@@ -233,19 +267,76 @@ export default function HomePage() {
           <div className="works-head">
             <p className="section-label reveal">Selected Works</p>
             <h2 id="works-title" className="reveal delay-1">
-              个人作品
+              作品集
             </h2>
+            {/* 分类切换：全部 / 各 JSON 配置的分类 */}
+            <div
+              className="works-category-tabs reveal delay-2"
+              role="tablist"
+              aria-label="作品分类"
+            >
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeWorkCategory === "all"}
+                className={`works-category-tab${activeWorkCategory === "all" ? " is-active" : ""}`}
+                onClick={() => setActiveWorkCategory("all")}
+              >
+                全部
+              </button>
+              {portfolioCategories.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeWorkCategory === cat.id}
+                  className={`works-category-tab${activeWorkCategory === cat.id ? " is-active" : ""}`}
+                  onClick={() => setActiveWorkCategory(cat.id)}
+                >
+                  <span className="works-category-tab-zh">{cat.titleZh}</span>
+                  <span className="works-category-tab-en">{cat.titleEn}</span>
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="works-grid">
-            <WorkCard
-              id="1"
-              delayClass="delay-1"
-              coverClass="cover-photo"
-              title="年糕的Color Walk"
-              subtitle="影像作品"
-              coverImage="https://cdn.xyfit.top/Jumboo/年糕的colorwalk.jpg"
-            />
-          </div>
+
+          {portfolioCategories.map((cat) => {
+            const visible =
+              activeWorkCategory === "all" || activeWorkCategory === cat.id;
+            return (
+              <div
+                key={cat.id}
+                className="works-category-block reveal delay-1"
+                hidden={!visible}
+                data-category-id={cat.id}
+              >
+                <h3 className="works-category-title">
+                  <span>{cat.titleZh}</span>
+                  <span className="works-category-title-sep">｜</span>
+                  <span className="works-category-title-en">{cat.titleEn}</span>
+                </h3>
+                <div className="works-grid">
+                  {cat.works.length === 0 ? (
+                    <p className="works-empty">该分类内容整理中，敬请期待。</p>
+                  ) : (
+                    cat.works.map((w) => (
+                      <WorkCard
+                        key={w.id}
+                        id={w.id}
+                        delayClass={w.delayClass}
+                        coverClass={w.coverClass}
+                        title={w.title}
+                        subtitle={w.subtitle}
+                        coverImage={w.coverImage}
+                        player={w.player}
+                        onPlay={setLightbox}
+                      />
+                    ))
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </section>
 
         <section id="coop" className="coop" aria-labelledby="coop-title">
@@ -253,26 +344,41 @@ export default function HomePage() {
           <h2 id="coop-title" className="reveal delay-1">
             合作方式
           </h2>
-          <p
-            className="reveal delay-2"
-            style={{
-              color: "rgba(74, 93, 96, 0.8)",
-              fontSize: "1.1rem",
-              maxWidth: "36rem",
-              margin: "0 auto",
-            }}
-          >
-            接受品牌短片、视觉概念、演出影像与展览内容等委托。周期与报价依项目而定，欢迎先写一封简单的信。
+          {/* 合作说明：与作品区副文案同色系，避免行内样式分散 */}
+          <p className="coop-lead reveal delay-2">
+            如果你有叙事短片、品牌宣传、视觉概念、个人定制类需求，都可以来找我聊聊！
           </p>
+          {/* 收尾句放在卡片外、紧接引导段，与示意图一致 */}
+          <p className="coop-outro reveal delay-2">期待一起做出喜欢的作品~</p>
           <div className="coop-card reveal delay-3">
-            <ul className="coop-list">
-              <li>商业委托与联名创作</li>
-              <li>艺术驻留与展览影像</li>
-              <li>工作坊与创作分享（线上/线下）</li>
-            </ul>
-            <br />
-            <a className="btn-mail" href="mailto:hello@jumboo.studio">
-              发起邮件联系
+            <dl className="coop-contact" aria-label="联系方式">
+              <div className="coop-contact-row">
+                <dt>邮箱</dt>
+                <dd>
+                  <a
+                    className="coop-contact-link"
+                    href="mailto:493182574@qq.com?subject=AI%E5%90%88%E4%BD%9C%20%2B%20%E9%9C%80%E6%B1%82%E7%B1%BB%E5%88%AB"
+                  >
+                    493182574@qq.com
+                  </a>
+                </dd>
+              </div>
+              <div className="coop-contact-row">
+                <dt>微信</dt>
+                <dd>
+                  <span className="coop-wechat">jumboo123</span>
+                </dd>
+              </div>
+              <div className="coop-contact-row coop-contact-row--note">
+                <dt>备注</dt>
+                <dd>AI合作 + 需求类别</dd>
+              </div>
+            </dl>
+            <a
+              className="btn-mail"
+              href="mailto:493182574@qq.com?subject=AI%E5%90%88%E4%BD%9C%20%2B%20%E9%9C%80%E6%B1%82%E7%B1%BB%E5%88%AB"
+            >
+              发邮件聊聊
               <svg
                 width="16"
                 height="16"
@@ -293,6 +399,13 @@ export default function HomePage() {
       </main>
 
       <footer>© Jumboo 阿布 · Immersive Experience</footer>
+
+      <WorkVideoLightbox
+        open={lightbox !== null}
+        title={lightbox?.title ?? ""}
+        player={lightbox?.player ?? null}
+        onClose={() => setLightbox(null)}
+      />
     </>
   );
 }

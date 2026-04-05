@@ -1,37 +1,71 @@
-import Link from "next/link";
+import type { WorkPlayerConfig } from "@/lib/worksConfig";
 
-/** 首页作品卡片：在 HomePage 的 works-grid 中按需引用，与 play/page.tsx 的 WORKS[id] 对应 */
+/** 首页作品卡片：点击后在首页灯箱播放（配置见 src/data/works.json） */
 export function WorkCard(props: {
   id: string;
   delayClass: string;
   coverClass: string;
   title: string;
   subtitle: string;
-  /** 可选：public 下的封面图路径 */
   coverImage?: string;
+  player?: WorkPlayerConfig;
+  /** 有可播放源时触发，打开首页视频层 */
+  onPlay?: (payload: { title: string; player: WorkPlayerConfig }) => void;
 }) {
-  const { id, delayClass, coverClass, title, subtitle, coverImage } = props;
+  const {
+    delayClass,
+    coverClass,
+    title,
+    subtitle,
+    coverImage,
+    player,
+    onPlay,
+  } = props;
 
   const cardClass = `work-card ${coverClass} reveal ${delayClass}`;
-  // 行内 url()：路径含中文时用 encodeURI，避免个别环境下样式解析异常
   const coverInnerStyle = coverImage
     ? { backgroundImage: `url("${encodeURI(coverImage)}")` }
     : undefined;
 
+  const canPlay = Boolean(player?.videoSrc || player?.douyinVideoId);
+
+  function handleActivate() {
+    if (!canPlay || !player || !onPlay) return;
+    onPlay({ title, player });
+  }
+
   return (
-    <Link className={cardClass} href={`/play?id=${id}`}>
+    <div
+      className={`${cardClass}${canPlay ? "" : " work-card--no-media"}`}
+      role={canPlay ? "button" : undefined}
+      tabIndex={canPlay ? 0 : undefined}
+      aria-label={canPlay ? `播放：${title}` : undefined}
+      onClick={canPlay ? handleActivate : undefined}
+      onKeyDown={
+        canPlay
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleActivate();
+              }
+            }
+          : undefined
+      }
+    >
       <div className="work-cover">
         <div className="work-cover-inner" style={coverInnerStyle} />
-        <span className="work-play" aria-hidden>
-          <svg viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        </span>
+        {canPlay ? (
+          <span className="work-play" aria-hidden>
+            <svg viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+        ) : null}
       </div>
       <div className="work-meta">
         <h3>{title}</h3>
         <p>{subtitle}</p>
       </div>
-    </Link>
+    </div>
   );
 }

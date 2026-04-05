@@ -277,48 +277,55 @@ body::-webkit-scrollbar { display: none; }
 
 /* 文字排版 */
 .hero-tag {
-  /* 与 Jumboo / 副文案同一衬线体系，减少字体种类 */
+  /* 与下方 Jumboo 副标同一条渐变，无白底胶囊，叠在视频上靠亮边提亮可读性 */
   font-family: var(--font-literata), "Songti SC", "Noto Serif SC", serif;
-  font-size: 0.78rem;
-  font-weight: 500;
+  /* 首屏身份行：略放大，随屏宽在舒适区间伸缩 */
+  font-size: clamp(0.88rem, 2.1vw, 1.05rem);
+  font-weight: 600;
   letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink);
   margin-bottom: 1.5rem;
   display: inline-block;
-  /* 胶囊内标签整行不换行，避免「优质签约创作者」被拆开 */
   white-space: nowrap;
-  padding: 0.45rem 1.1rem;
-  background: rgba(255, 255, 255, 0.82);
-  border-radius: 100px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  padding: 0.2em 0 0.28em;
+  background: linear-gradient(120deg, #e85a6b, #6b8fd4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9))
+    drop-shadow(0 1px 2px rgba(42, 51, 53, 0.18));
   opacity: 0;
   animation: fade-up 1.2s var(--ease-out-expo) 0.2s forwards;
 }
 
 .hero h1 {
-  /* 中文名与 Jumboo 两行垂直叠放时，整体相对首屏水平居中 */
+  /* 中文署名图为块级 + Jumboo 副标，整体相对首屏水平居中 */
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: var(--font-sora), sans-serif;
   font-weight: 400;
+  /* 主标题为图片时，字号仅作用于可继承的子元素（如 span） */
   font-size: clamp(3rem, 10vw, 5.5rem);
-  /* 略大于 1，避免与下行字母被父级/渐变裁切（原 line-height:1 会切掉字尾） */
   line-height: 1.12;
   letter-spacing: -0.03em;
   margin: 0 0 1rem;
   color: var(--ink);
   opacity: 0;
   animation: fade-up 1.2s var(--ease-out-expo) 0.4s forwards;
-  /* 双层描边感：浅色外晕 + 深色细影，叠在复杂背景上仍清晰 */
-  text-shadow:
-    0 0 1px rgba(255, 255, 255, 0.95),
-    0 1px 2px rgba(255, 255, 255, 0.9),
-    0 0 28px rgba(255, 255, 255, 0.75),
-    0 2px 14px rgba(42, 51, 53, 0.18);
+}
+
+/* 首屏「阿布」透明设计字：宽度随屏缩放，drop-shadow 替代原 h1 文字阴影 */
+.hero h1 .hero-name-logo {
+  display: block;
+  width: min(92vw, 520px);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.95))
+    drop-shadow(0 1px 2px rgba(255, 255, 255, 0.9))
+    drop-shadow(0 0 28px rgba(255, 255, 255, 0.75))
+    drop-shadow(0 2px 14px rgba(42, 51, 53, 0.18));
 }
 
 .hero h1 span {
@@ -481,6 +488,93 @@ h2 {
   margin: 0 auto 4rem;
 }
 
+/* 作品集分类 Tab */
+.works-category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.65rem;
+  margin-top: 1.75rem;
+  max-width: 100%;
+}
+
+.works-category-tab {
+  font-family: var(--font-sora), sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-align: left;
+  padding: 0.55rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.35);
+  color: var(--slate);
+  cursor: pointer;
+  transition:
+    background 0.35s var(--ease-out-expo),
+    border-color 0.35s var(--ease-out-expo),
+    box-shadow 0.35s var(--ease-out-expo);
+  backdrop-filter: blur(10px);
+  line-height: 1.35;
+}
+
+.works-category-tab:hover {
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+.works-category-tab.is-active {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(255, 168, 168, 0.45);
+  box-shadow: 0 6px 24px var(--shadow-soft);
+}
+
+.works-category-tab-en {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  opacity: 0.82;
+  margin-top: 0.12rem;
+}
+
+.works-category-tab:not(.is-active) .works-category-tab-en {
+  opacity: 0.72;
+}
+
+/* 「全部」仅一行 */
+.works-category-tab:first-child .works-category-tab-en {
+  display: none;
+}
+
+.works-category-block {
+  max-width: 76rem;
+  margin: 0 auto 3.5rem;
+}
+
+.works-category-block:last-of-type {
+  margin-bottom: 0;
+}
+
+.works-category-title {
+  font-family: var(--font-sora), sans-serif;
+  font-weight: 500;
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+  color: var(--slate);
+  margin: 0 0 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+.works-category-title-en {
+  font-weight: 400;
+  opacity: 0.88;
+}
+
+.works-category-title-sep {
+  margin: 0 0.35rem;
+  opacity: 0.55;
+  font-weight: 400;
+}
+
 .works-grid {
   max-width: 76rem;
   margin: 0 auto;
@@ -613,16 +707,230 @@ h2 {
   color: rgba(74, 93, 96, 0.7);
 }
 
-/* --- 合作区块 --- */
-.coop {
-  max-width: 54rem;
-  margin: 0 auto;
+/* 可点击卡片：指针与键盘焦点环（保留 .work-card 原有描边） */
+.work-card[role="button"] {
+  cursor: pointer;
+  width: 100%;
+  text-align: inherit;
+  font: inherit;
+}
+
+.work-card[role="button"]:focus-visible {
+  outline: 2px solid var(--macaron-coral);
+  outline-offset: 4px;
+}
+
+/* 未配置 videoSrc / 抖音 id：不可播放，弱化 hover */
+.work-card--no-media {
+  cursor: default;
+  opacity: 0.92;
+}
+
+.work-card--no-media:hover {
+  transform: none;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
+  background: rgba(255, 255, 255, 0.3);
+  z-index: 1;
+}
+
+.work-card--no-media:hover .work-meta h3 {
+  color: var(--slate);
+}
+
+/* --- 首页作品视频灯箱（替代 /play）--- */
+.work-lightbox-root {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 2rem);
+  pointer-events: none;
+}
+
+.work-lightbox-root > * {
+  pointer-events: auto;
+}
+
+.work-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  background: rgba(42, 51, 53, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.work-lightbox-panel {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 920px);
+  max-height: min(92vh, 900px);
+  /* 移动端地址栏伸缩用 dvh，避免面板超出可视区导致内部被裁切（不支持 dvh 时沿用上一行） */
+  max-height: min(92dvh, 92vh, 900px);
+  display: flex;
+  flex-direction: column;
+  background: rgba(251, 249, 246, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 16px;
+  box-shadow:
+    0 24px 64px rgba(74, 93, 96, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.work-lightbox-toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1rem 0.75rem 1.25rem;
+}
+
+.work-lightbox-title {
+  font-family: var(--font-sora), sans-serif;
+  font-weight: 500;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: var(--slate);
+  margin: 0;
+  line-height: 1.35;
+  padding-top: 0.15rem;
+}
+
+.work-lightbox-close {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--slate);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.25s var(--ease-out-expo);
+}
+
+.work-lightbox-close:hover {
+  background: rgba(255, 219, 233, 0.65);
+}
+
+.work-lightbox-stage {
+  margin: 0 1rem 1rem;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #c5e0d8, #e8b8a8, #d4c4e0);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  position: relative;
+  /* 在 flex 面板内允许按比例收缩，避免小屏总高度顶破 max-height 后只露出局部 */
+  flex-shrink: 1;
+  min-height: 0;
+  max-width: 100%;
+}
+
+.work-lightbox-stage--embed {
+  display: block;
+  padding: 0;
+  background: #0c0c0c;
+}
+
+/* iframe / 原生 video：绝对铺满舞台，禁止再用 min-height 与 aspect-ratio 打架（手机端会裁成「上黑下画」） */
+.work-lightbox-iframe {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.work-lightbox-video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #0c0c0c;
+}
+
+.work-lightbox-placeholder {
+  margin: 0;
+  padding: 2rem;
+  font-family: var(--font-sora), sans-serif;
+  font-size: 0.9rem;
+  color: rgba(42, 51, 53, 0.65);
   text-align: center;
 }
 
+.work-lightbox-fallback {
+  margin: 0 1.25rem 0.75rem;
+  text-align: center;
+  font-family: var(--font-sora), sans-serif;
+  font-size: 0.78rem;
+}
+
+.work-lightbox-fallback-link {
+  color: rgba(74, 93, 96, 0.65);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.work-lightbox-fallback-link:hover {
+  color: var(--slate);
+}
+
+.work-lightbox-note {
+  margin: 0 1.25rem 1.25rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: rgba(74, 93, 96, 0.78);
+  text-align: center;
+}
+
+/* --- 合作区块：与 .works-head 同宽、左对齐，和作品区纵向边线一致 --- */
+.coop {
+  max-width: 76rem;
+  margin: 0 auto;
+  text-align: left;
+}
+
+/* 合作区引导文案：与作品区说明色值、字号体系对齐；整句单行，避免「聊聊」被拆开 */
+.coop-lead {
+  margin: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  font-family: var(--font-literata), "Songti SC", "Noto Serif SC", serif;
+  font-size: clamp(1.05rem, 2.2vw, 1.12rem);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  color: rgba(74, 93, 96, 0.85);
+}
+
+/* 收尾句在引导段与联系卡片之间，左对齐、略轻一阶 */
+.coop-outro {
+  max-width: min(40rem, 100%);
+  margin: 0.65rem 0 1.5rem;
+  font-family: var(--font-literata), "Songti SC", "Noto Serif SC", serif;
+  font-size: 1.02rem;
+  color: rgba(74, 93, 96, 0.78);
+  line-height: 1.6;
+}
+
 .coop-card {
-  margin-top: 3rem;
-  padding: clamp(3rem, 6vw, 4rem);
+  margin-top: 0;
+  padding: clamp(2.5rem, 5vw, 3.25rem) clamp(1.75rem, 4vw, 2.75rem);
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.8);
@@ -643,30 +951,77 @@ h2 {
   z-index: -1;
 }
 
-.coop-list {
-  list-style: none;
-  margin: 2rem auto 0;
+/* 联系方式：与卡片同左缘对齐；标签与内容同一套衬线字体，避免邮箱/微信/备注混用无衬线+等宽 */
+.coop-contact {
+  margin: 0;
   padding: 0;
+  max-width: min(28rem, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
   text-align: left;
-  display: inline-block;
+  font-family: var(--font-literata), "Songti SC", "Noto Serif SC", serif;
 }
 
-.coop-list li {
-  position: relative;
-  padding-left: 2rem;
-  margin-bottom: 1rem;
+.coop-contact-row {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  gap: 0.65rem 1rem;
+  align-items: baseline;
+}
+
+.coop-contact-row dt {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(74, 93, 96, 0.55);
+}
+
+.coop-contact-row dd {
+  margin: 0;
   font-size: 1.05rem;
+  line-height: 1.5;
   color: var(--slate);
+  word-break: break-all;
 }
 
-.coop-list li::before {
-  content: "";
-  position: absolute;
-  left: 0; top: 0.45em;
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--macaron-coral), #FF8A8A);
-  box-shadow: 0 2px 8px var(--shadow-color);
+.coop-contact-link {
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--slate);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 168, 168, 0.45);
+  transition: color 0.3s var(--ease-out-expo), border-color 0.3s var(--ease-out-expo);
+}
+
+.coop-contact-link:hover {
+  color: var(--macaron-coral);
+  border-bottom-color: var(--macaron-coral);
+}
+
+/* 微信号与右侧正文同字族、同字号（仅作语义包裹，样式继承 dd） */
+.coop-wechat {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+/* 备注行略弱化，区分主联系方式 */
+.coop-contact-row--note dd {
+  font-size: 0.98rem;
+  color: rgba(74, 93, 96, 0.82);
+}
+
+/* 收尾句与按钮间距：略小于通用 btn-mail 顶边距，成组更紧凑 */
+.coop-card .btn-mail {
+  margin-top: 1.85rem;
+}
+
+@media (max-width: 420px) {
+  .coop-contact-row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
 }
 
 /* 丝滑按钮 */
