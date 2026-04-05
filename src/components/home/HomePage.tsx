@@ -3,6 +3,14 @@
 import { useEffect, useMemo, useRef } from "react";
 import { WorkCard } from "./WorkCard";
 
+/** 微信 Android X5 内核：声明 H5 内联播放，避免视频走系统全屏层导致背景层「看不见」 */
+const WECHAT_X5_VIDEO_PROPS = {
+  "x5-playsinline": "",
+  "x5-video-player-type": "h5",
+  /** 旧版 iOS WebKit 内联补充（playsInline 已映射标准属性） */
+  "webkit-playsinline": "",
+} as Record<string, string>;
+
 /** 首页：原 preview.html 的交互（视频、粒子、导航与 reveal）迁到客户端组件 */
 export default function HomePage() {
   const bgVideoRef = useRef<HTMLVideoElement>(null);
@@ -55,19 +63,22 @@ export default function HomePage() {
       }
     }
 
-    const onCanPlay = () => {
+    // 微信内置浏览器有时不触发 canplay，用 loadedmetadata / loadeddata 兜底显示（.is-ready 控制 opacity）
+    const onMediaProgress = () => {
       markVideoReady();
       syncBgVideoPlayback();
     };
 
     if (boundVideo) {
-      boundVideo.addEventListener("canplay", onCanPlay, { once: true });
+      boundVideo.addEventListener("canplay", onMediaProgress);
+      boundVideo.addEventListener("loadeddata", onMediaProgress);
+      boundVideo.addEventListener("loadedmetadata", onMediaProgress);
       boundVideo.addEventListener("error", () => {
         boundVideo.classList.remove("is-ready");
       });
-      if (boundVideo.readyState >= 3) {
-        markVideoReady();
-        syncBgVideoPlayback();
+      // HAVE_CURRENT_DATA(2)：已有当前帧，略早于 canplay，利于 WebView 首帧就绪即显式
+      if (boundVideo.readyState >= 2) {
+        onMediaProgress();
       }
     }
 
@@ -88,7 +99,11 @@ export default function HomePage() {
     }
 
     return () => {
-      boundVideo?.removeEventListener("canplay", onCanPlay);
+      if (boundVideo) {
+        boundVideo.removeEventListener("canplay", onMediaProgress);
+        boundVideo.removeEventListener("loadeddata", onMediaProgress);
+        boundVideo.removeEventListener("loadedmetadata", onMediaProgress);
+      }
       reduceMotionMq.removeEventListener("change", syncBgVideoPlayback);
       observer?.disconnect();
     };
@@ -167,6 +182,7 @@ export default function HomePage() {
               loop
               playsInline
               preload="auto"
+              {...WECHAT_X5_VIDEO_PROPS}
             >
               {/* 背景视频走 CDN，减轻源站压力并利于微信等环境稳定拉流 */}
               <source
