@@ -285,14 +285,16 @@
 
     /* 文字排版 */
     .hero-tag {
-      font-family: "Sora", sans-serif;
-      font-size: 0.75rem;
+      font-family: "Literata", "Songti SC", "Noto Serif SC", serif;
+      font-size: 0.78rem;
       font-weight: 500;
-      letter-spacing: 0.3em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--ink);
       margin-bottom: 1.5rem;
       display: inline-block;
+      /* 胶囊内标签整行不换行，避免「优质签约创作者」被拆开 */
+      white-space: nowrap;
       padding: 0.45rem 1.1rem;
       background: rgba(255, 255, 255, 0.82);
       border-radius: 100px;
@@ -304,6 +306,10 @@
     }
 
     .hero h1 {
+      /* 中文名与 Jumboo 两行垂直叠放时，整体相对首屏水平居中 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       font-family: "Sora", sans-serif;
       font-weight: 400;
       font-size: clamp(3rem, 10vw, 5.5rem);
@@ -334,25 +340,40 @@
       background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-top: 0.5rem;
-      transform: translateX(-10px);
       text-shadow: none;
       filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.85)) drop-shadow(0 1px 3px rgba(42, 51, 53, 0.2));
     }
 
     .hero-lead {
-      max-width: 32rem;
+      font-family: "Literata", "Songti SC", "Noto Serif SC", "STSong", serif;
+      font-style: normal;
+      max-width: min(94vw, 46rem);
       margin: 2rem auto 0;
-      color: var(--ink);
-      font-size: 1.15rem;
+      color: rgba(88, 95, 125, 0.92);
+      font-size: clamp(1.08rem, 2.5vw, 1.2rem);
       font-weight: 500;
-      line-height: 1.75;
+      line-height: 1.6;
+      letter-spacing: 0.03em;
       opacity: 0;
       animation: fade-up 1.2s var(--ease-out-expo) 0.6s forwards;
       text-shadow:
-        0 0 1px rgba(255, 255, 255, 0.9),
-        0 1px 0 rgba(255, 255, 255, 0.85),
-        0 0 20px rgba(255, 255, 255, 0.65),
-        0 2px 10px rgba(42, 51, 53, 0.12);
+        0 0 2px rgba(255, 255, 255, 1),
+        0 1px 2px rgba(255, 255, 255, 0.98),
+        0 0 22px rgba(255, 255, 255, 0.75),
+        0 1px 4px rgba(88, 95, 125, 0.08);
+    }
+
+    .hero-lead-line {
+      display: block;
+    }
+
+    .hero-lead-line + .hero-lead-line {
+      margin-top: 0.35rem;
+    }
+
+    /* 避免「奖」「项」之间被拆行 */
+    .hero-lead-keep {
+      white-space: nowrap;
     }
 
     @keyframes fade-up {
@@ -691,34 +712,6 @@
       opacity: 0.6;
     }
 
-    /* 自定义光标 */
-    .cursor-dot,
-    .cursor-outline {
-      position: fixed;
-      top: 0;
-      left: 0;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      z-index: 9999;
-      pointer-events: none;
-    }
-
-    .cursor-dot {
-      width: 8px;
-      height: 8px;
-      background-color: var(--macaron-coral);
-    }
-
-    .cursor-outline {
-      width: 40px;
-      height: 40px;
-      border: 1px solid rgba(255, 168, 168, 0.5);
-      transition: width 0.2s, height 0.2s, background-color 0.2s;
-    }
-    
-    @media (hover: none) and (pointer: coarse) {
-      .cursor-dot, .cursor-outline { display: none; }
-    }
   </style>
 </head>
 <body>
@@ -729,10 +722,6 @@
   
   <!-- 漂浮粒子 -->
   <div class="particles" id="particles"></div>
-
-  <!-- 鼠标光标 -->
-  <div class="cursor-dot" id="cursor-dot"></div>
-  <div class="cursor-outline" id="cursor-outline"></div>
 
   <header class="nav" id="nav">
     <span class="nav-brand">Jumboo</span>
@@ -761,14 +750,14 @@
         <div class="bg-video-blend"></div>
       </div>
       <div class="hero-inner">
-        <span class="hero-tag">AI 影像 · 叙事与想象</span>
+        <span class="hero-tag">AIGC创作者｜跨界新人 | 优质签约创作者</span>
         <h1 id="hero-title">
           阿布
           <span>Jumboo</span>
         </h1>
         <p class="hero-lead">
-          用生成式影像探索光、几何与情绪。<br/>
-          在这里浏览我的创作片段，也欢迎聊聊下一次视觉实验。
+          <span class="hero-lead-line">跨行入局，天赋与运气同行，凭热爱与坚持斩获多项平台<span class="hero-lead-keep">奖项。</span></span>
+          <span class="hero-lead-line">以态度与温度重构AI影像，不被定义，自有风格。</span>
         </p>
       </div>
       <div class="scroll-hint">
@@ -850,7 +839,7 @@
           <li>工作坊与创作分享（线上/线下）</li>
         </ul>
         <br/>
-        <a class="btn-mail hover-target" href="mailto:hello@jumboo.studio">
+        <a class="btn-mail" href="mailto:hello@jumboo.studio">
           发起邮件联系
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
         </a>
@@ -936,47 +925,7 @@
         particlesContainer.appendChild(p);
       }
 
-      // 2. 自定义鼠标光标逻辑
-      const cursorDot = document.getElementById("cursor-dot");
-      const cursorOutline = document.getElementById("cursor-outline");
-      let mouseX = window.innerWidth / 2;
-      let mouseY = window.innerHeight / 2;
-      let outlineX = mouseX;
-      let outlineY = mouseY;
-
-      window.addEventListener("mousemove", (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        cursorDot.style.left = `${mouseX}px`;
-        cursorDot.style.top = `${mouseY}px`;
-      });
-
-      // 缓动动画让外圈跟随更丝滑
-      function renderCursor() {
-        outlineX += (mouseX - outlineX) * 0.15;
-        outlineY += (mouseY - outlineY) * 0.15;
-        cursorOutline.style.left = `${outlineX}px`;
-        cursorOutline.style.top = `${outlineY}px`;
-        requestAnimationFrame(renderCursor);
-      }
-      requestAnimationFrame(renderCursor);
-
-      // 交互元素光标放大特效
-      const hoverTargets = document.querySelectorAll('a, button, .hover-target');
-      hoverTargets.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-          cursorOutline.style.width = '60px';
-          cursorOutline.style.height = '60px';
-          cursorOutline.style.backgroundColor = 'rgba(255, 168, 168, 0.1)';
-        });
-        el.addEventListener('mouseleave', () => {
-          cursorOutline.style.width = '40px';
-          cursorOutline.style.height = '40px';
-          cursorOutline.style.backgroundColor = 'transparent';
-        });
-      });
-
-      // 3. 导航栏滚动磨砂背景
+      // 2. 导航栏滚动磨砂背景
       const nav = document.getElementById("nav");
       function onScroll() {
         nav.classList.toggle("scrolled", window.scrollY > 50);
@@ -984,7 +933,7 @@
       window.addEventListener("scroll", onScroll, { passive: true });
       onScroll();
 
-      // 4. 滚入视口时触发交错进入动效
+      // 3. 滚入视口时触发交错进入动效
       const reveals = document.querySelectorAll(".reveal");
       const obs = new IntersectionObserver(
         (entries) => {

@@ -277,14 +277,17 @@ body::-webkit-scrollbar { display: none; }
 
 /* 文字排版 */
 .hero-tag {
-  font-family: var(--font-sora), sans-serif;
-  font-size: 0.75rem;
+  /* 与 Jumboo / 副文案同一衬线体系，减少字体种类 */
+  font-family: var(--font-literata), "Songti SC", "Noto Serif SC", serif;
+  font-size: 0.78rem;
   font-weight: 500;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ink);
   margin-bottom: 1.5rem;
   display: inline-block;
+  /* 胶囊内标签整行不换行，避免「优质签约创作者」被拆开 */
+  white-space: nowrap;
   padding: 0.45rem 1.1rem;
   background: rgba(255, 255, 255, 0.82);
   border-radius: 100px;
@@ -296,6 +299,10 @@ body::-webkit-scrollbar { display: none; }
 }
 
 .hero h1 {
+  /* 中文名与 Jumboo 两行垂直叠放时，整体相对首屏水平居中 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-family: var(--font-sora), sans-serif;
   font-weight: 400;
   font-size: clamp(3rem, 10vw, 5.5rem);
@@ -326,25 +333,44 @@ body::-webkit-scrollbar { display: none; }
   background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-top: 0.5rem;
-  transform: translateX(-10px);
   text-shadow: none;
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.85)) drop-shadow(0 1px 3px rgba(42, 51, 53, 0.2));
 }
 
 .hero-lead {
-  max-width: 32rem;
+  /* 与「Jumboo」同属 Literata 气质；中文用宋体系回退，保证清晰不糊 */
+  font-family: var(--font-literata), "Songti SC", "Noto Serif SC", "STSong", serif;
+  font-style: normal;
+  max-width: min(94vw, 46rem);
   margin: 2rem auto 0;
-  color: var(--ink);
-  font-size: 1.15rem;
+  /* 色相贴近 Jumboo 渐变里的蓝紫，比纯黑柔和、仍易辨认 */
+  color: rgba(88, 95, 125, 0.92);
+  font-size: clamp(1.08rem, 2.5vw, 1.2rem);
   font-weight: 500;
-  line-height: 1.75;
+  line-height: 1.6;
+  letter-spacing: 0.03em;
   opacity: 0;
   animation: fade-up 1.2s var(--ease-out-expo) 0.6s forwards;
+  /* 略加强亮边，叠在视频背景上更利落 */
   text-shadow:
-    0 0 1px rgba(255, 255, 255, 0.9),
-    0 1px 0 rgba(255, 255, 255, 0.85),
-    0 0 20px rgba(255, 255, 255, 0.65),
-    0 2px 10px rgba(42, 51, 53, 0.12);
+    0 0 2px rgba(255, 255, 255, 1),
+    0 1px 2px rgba(255, 255, 255, 0.98),
+    0 0 22px rgba(255, 255, 255, 0.75),
+    0 1px 4px rgba(88, 95, 125, 0.08);
+}
+
+/* 两行副文案之间收紧间距（替代双 <br>） */
+.hero-lead-line {
+  display: block;
+}
+
+.hero-lead-line + .hero-lead-line {
+  margin-top: 0.35rem;
+}
+
+/* 避免「奖」「项」之间被浏览器拆到两行 */
+.hero-lead-keep {
+  white-space: nowrap;
 }
 
 @keyframes fade-up {
@@ -683,31 +709,3 @@ footer {
   opacity: 0.6;
 }
 
-/* 自定义光标 */
-.cursor-dot,
-.cursor-outline {
-  position: fixed;
-  top: 0;
-  left: 0;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  z-index: 9999;
-  pointer-events: none;
-}
-
-.cursor-dot {
-  width: 8px;
-  height: 8px;
-  background-color: var(--macaron-coral);
-}
-
-.cursor-outline {
-  width: 40px;
-  height: 40px;
-  border: 1px solid rgba(255, 168, 168, 0.5);
-  transition: width 0.2s, height 0.2s, background-color 0.2s;
-}
-
-@media (hover: none) and (pointer: coarse) {
-  .cursor-dot, .cursor-outline { display: none; }
-}

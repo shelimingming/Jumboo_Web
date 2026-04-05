@@ -3,13 +3,11 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef } from "react";
 
-/** 首页：原 preview.html 的交互（视频、粒子、光标、导航与 reveal）迁到客户端组件 */
+/** 首页：原 preview.html 的交互（视频、粒子、导航与 reveal）迁到客户端组件 */
 export default function HomePage() {
   const bgVideoRef = useRef<HTMLVideoElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const navRef = useRef<HTMLElement>(null);
-  const cursorDotRef = useRef<HTMLDivElement>(null);
-  const cursorOutlineRef = useRef<HTMLDivElement>(null);
 
   // 用 ref 记录首屏是否在视口内，避免 setState 触发 effect 重建 Observer
   const heroInViewRef = useRef(true);
@@ -96,58 +94,9 @@ export default function HomePage() {
     };
   }, []);
 
-  // 自定义光标与导航滚动、reveal 观察器
+  // 导航滚动磨砂、reveal 观察器（已移除自定义光标）
   useEffect(() => {
-    const cursorDot = cursorDotRef.current;
-    const cursorOutline = cursorOutlineRef.current;
     const nav = navRef.current;
-
-    let raf = 0;
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let outlineX = mouseX;
-    let outlineY = mouseY;
-
-    const onMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      if (cursorDot) {
-        cursorDot.style.left = `${mouseX}px`;
-        cursorDot.style.top = `${mouseY}px`;
-      }
-    };
-
-    const renderCursor = () => {
-      if (cursorOutline) {
-        outlineX += (mouseX - outlineX) * 0.15;
-        outlineY += (mouseY - outlineY) * 0.15;
-        cursorOutline.style.left = `${outlineX}px`;
-        cursorOutline.style.top = `${outlineY}px`;
-      }
-      raf = requestAnimationFrame(renderCursor);
-    };
-
-    window.addEventListener("mousemove", onMove);
-    raf = requestAnimationFrame(renderCursor);
-
-    const onHoverTargetEnter = () => {
-      if (!cursorOutline) return;
-      cursorOutline.style.width = "60px";
-      cursorOutline.style.height = "60px";
-      cursorOutline.style.backgroundColor = "rgba(255, 168, 168, 0.1)";
-    };
-    const onHoverTargetLeave = () => {
-      if (!cursorOutline) return;
-      cursorOutline.style.width = "40px";
-      cursorOutline.style.height = "40px";
-      cursorOutline.style.backgroundColor = "transparent";
-    };
-
-    const hoverTargets = document.querySelectorAll("a, button, .hover-target");
-    hoverTargets.forEach((el) => {
-      el.addEventListener("mouseenter", onHoverTargetEnter);
-      el.addEventListener("mouseleave", onHoverTargetLeave);
-    });
 
     const onScroll = () => {
       if (nav) nav.classList.toggle("scrolled", window.scrollY > 50);
@@ -167,13 +116,7 @@ export default function HomePage() {
     reveals.forEach((el) => obs.observe(el));
 
     return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("mousemove", onMove);
       window.removeEventListener("scroll", onScroll);
-      hoverTargets.forEach((el) => {
-        el.removeEventListener("mouseenter", onHoverTargetEnter);
-        el.removeEventListener("mouseleave", onHoverTargetLeave);
-      });
       obs.disconnect();
     };
   }, []);
@@ -198,9 +141,6 @@ export default function HomePage() {
           />
         ))}
       </div>
-
-      <div className="cursor-dot" ref={cursorDotRef} id="cursor-dot" />
-      <div className="cursor-outline" ref={cursorOutlineRef} id="cursor-outline" />
 
       <header className="nav" id="nav" ref={navRef}>
         <span className="nav-brand">Jumboo</span>
@@ -242,7 +182,13 @@ export default function HomePage() {
               <span>Jumboo</span>
             </h1>
             <p className="hero-lead">
-              从跨行入局到签约作者，用态度与温度重构AI影像。
+              <span className="hero-lead-line">
+                跨行入局，天赋与运气同行，凭热爱与坚持斩获多项平台
+                <span className="hero-lead-keep">奖项。</span>
+              </span>
+              <span className="hero-lead-line">
+                以态度与温度重构AI影像，不被定义，自有风格。
+              </span>
             </p>
           </div>
           <div className="scroll-hint">
@@ -319,7 +265,7 @@ export default function HomePage() {
               <li>工作坊与创作分享（线上/线下）</li>
             </ul>
             <br />
-            <a className="btn-mail hover-target" href="mailto:hello@jumboo.studio">
+            <a className="btn-mail" href="mailto:hello@jumboo.studio">
               发起邮件联系
               <svg
                 width="16"
