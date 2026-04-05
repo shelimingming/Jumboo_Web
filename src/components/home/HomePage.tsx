@@ -187,11 +187,10 @@ export default function HomePage() {
             </h1>
             <p className="hero-lead">
               <span className="hero-lead-line">
-                跨行入局，天赋与运气同行，凭热爱与坚持斩获多项平台
-                <span className="hero-lead-keep">奖项。</span>
+                {`🌸有态度也有温度的AIGC创作者阿布✌︎' ֊'`}
               </span>
               <span className="hero-lead-line">
-                以态度与温度重构AI影像，不被定义，自有风格。
+                🤗一个时I时E、时T时F的非典型ENTJ~
               </span>
             </p>
           </div>
