@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>阿布 Jumboo · AI 影像创作者</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* 马卡龙配色系统 */
+      --macaron-pink: #FFDbe9;
+      --macaron-blue: #D6E8F8;
+      --macaron-yellow: #FFF3D6;
+      --macaron-purple: #E8DDFA;
+      --macaron-green: #DDF0E6;
+      --macaron-coral: #FFA8A8;
+      
+      --cream: #fbf9f6;
+      --slate: #4A5D60;
+      --ink: #2a3335;
+      
+      --shadow-soft: rgba(74, 93, 96, 0.08);
+      --shadow-lift: rgba(74, 93, 96, 0.16);
+      --shadow-color: rgba(255, 168, 168, 0.2);
+      
+      /* 极致丝滑的缓动函数 */
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out-sine: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-liquid: cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Literata", Georgia, serif;
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: var(--ink);
+      background-color: var(--cream);
+      overflow-x: hidden;
+      /* 隐藏原生滚动条使视觉更干净，可选 */
+      scrollbar-width: none; 
+    }
+    body::-webkit-scrollbar { display: none; }
+
+    /* --- 全页马卡龙网格背景（首屏由 Hero 内视频盖住，滚动后仍可见）--- */
+    .mesh-background {
+      position: fixed;
+      inset: -50vw -50vh;
+      z-index: -4;
+      background-image:
+        radial-gradient(circle at 15% 25%, var(--macaron-pink) 0%, transparent 40%),
+        radial-gradient(circle at 85% 15%, var(--macaron-blue) 0%, transparent 35%),
+        radial-gradient(circle at 50% 80%, var(--macaron-purple) 0%, transparent 45%),
+        radial-gradient(circle at 10% 80%, var(--macaron-yellow) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, var(--macaron-green) 0%, transparent 40%);
+      background-color: var(--cream);
+      filter: blur(60px);
+      animation: mesh-breathe 25s var(--ease-in-out-sine) infinite alternate;
+      will-change: transform;
+      pointer-events: none;
+    }
+
+    @keyframes mesh-breathe {
+      0% { transform: scale(1) translate(0, 0) rotate(0deg); }
+      50% { transform: scale(1.05) translate(2%, 1%) rotate(1deg); }
+      100% { transform: scale(1.1) translate(-1%, -2%) rotate(-1deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .mesh-background {
+        animation: none;
+      }
+    }
+
+    /* --- 仅首屏 Hero：背景视频 + 柔光叠层（与页面主色融合）--- */
+    .hero-video-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background: var(--cream);
+    }
+
+    .bg-video {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 100%;
+      height: 100%;
+      min-width: 100%;
+      min-height: 100%;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      opacity: 0;
+      /* 轻微饱和与亮度，便于与粉蓝叠层衔接 */
+      filter: saturate(1.02) brightness(1.03);
+      transition: opacity 1.4s var(--ease-out-expo);
+    }
+
+    .bg-video.is-ready {
+      opacity: 1;
+    }
+
+    /* 马卡龙渐变罩：柔化视频边缘、统一粉/蓝/奶油调性 */
+    .bg-video-blend {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 120% 90% at 50% -10%, rgba(251, 249, 246, 0.72) 0%, transparent 52%),
+        radial-gradient(ellipse 90% 70% at 95% 25%, rgba(255, 219, 233, 0.42) 0%, transparent 48%),
+        radial-gradient(ellipse 80% 60% at 5% 75%, rgba(214, 232, 248, 0.4) 0%, transparent 45%),
+        radial-gradient(ellipse 70% 55% at 80% 85%, rgba(232, 221, 250, 0.28) 0%, transparent 50%),
+        linear-gradient(175deg, rgba(251, 249, 246, 0.18) 0%, rgba(251, 249, 246, 0.38) 45%, rgba(255, 243, 214, 0.28) 100%);
+      animation: blend-breathe 22s var(--ease-in-out-sine) infinite alternate;
+    }
+
+    @keyframes blend-breathe {
+      0% { opacity: 0.92; filter: saturate(1); }
+      100% { opacity: 1; filter: saturate(1.06); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bg-video-blend {
+        animation: none;
+        opacity: 1;
+      }
+    }
+
+    /* 噪点纹理增加质感 */
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      opacity: 0.25;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+      pointer-events: none;
+      mix-blend-mode: multiply;
+    }
+
+    /* --- 漂浮粒子 --- */
+    .particles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: white;
+      opacity: 0.6;
+      box-shadow: 0 0 20px 2px rgba(255,255,255,0.8);
+      animation: float-up linear infinite;
+    }
+
+    @keyframes float-up {
+      0% { transform: translateY(110vh) translateX(0) scale(0); opacity: 0; }
+      20% { opacity: 0.6; scale: 1; }
+      80% { opacity: 0.6; }
+      100% { transform: translateY(-10vh) translateX(100px) scale(0.5); opacity: 0; }
+    }
+
+    /* --- 导航栏 --- */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem clamp(1.5rem, 5vw, 4rem);
+      transition: all 0.6s var(--ease-out-expo);
+    }
+
+    .nav.scrolled {
+      padding: 1rem clamp(1.5rem, 5vw, 4rem);
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .nav-brand {
+      font-family: "Sora", sans-serif;
+      font-weight: 500;
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--slate);
+      text-shadow: 0 2px 10px rgba(255,255,255,0.5);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+      margin: 0; padding: 0;
+    }
+
+    .nav-links a {
+      font-family: "Sora", sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--slate);
+      text-decoration: none;
+      position: relative;
+      padding: 0.5rem 0;
+      transition: color 0.4s var(--ease-out-expo);
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 100%; height: 2px;
+      background: var(--macaron-coral);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.5s var(--ease-out-expo);
+      border-radius: 2px;
+    }
+
+    .nav-links a:hover {
+      color: var(--macaron-coral);
+    }
+
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    /* --- Hero 首屏（视频仅在此区域内，overflow 裁切）--- */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 6rem clamp(1.5rem, 5vw, 4rem) 4rem;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .hero-inner {
+      max-width: 56rem;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      padding: 1.25rem 1.5rem;
+    }
+
+    /* 标题区极淡柔光：只轻微匀光，避免衬出明显矩形块 */
+    .hero-inner::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: min(160%, 64rem);
+      height: 180%;
+      z-index: -1;
+      pointer-events: none;
+      background: radial-gradient(
+        ellipse 55% 48% at 50% 50%,
+        rgba(251, 249, 246, 0.42) 0%,
+        rgba(251, 249, 246, 0.14) 38%,
+        rgba(251, 249, 246, 0.04) 58%,
+        transparent 76%
+      );
+      filter: blur(36px);
+      -webkit-filter: blur(36px);
+    }
+
+    /* 文字排版 */
+    .hero-tag {
+      font-family: "Sora", sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+      display: inline-block;
+      padding: 0.45rem 1.1rem;
+      background: rgba(255, 255, 255, 0.82);
+      border-radius: 100px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      opacity: 0;
+      animation: fade-up 1.2s var(--ease-out-expo) 0.2s forwards;
+    }
+
+    .hero h1 {
+      font-family: "Sora", sans-serif;
+      font-weight: 400;
+      font-size: clamp(3rem, 10vw, 5.5rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin: 0 0 1rem;
+      color: var(--ink);
+      opacity: 0;
+      animation: fade-up 1.2s var(--ease-out-expo) 0.4s forwards;
+      /* 双层描边感：浅色外晕 + 深色细影，叠在复杂背景上仍清晰 */
+      text-shadow:
+        0 0 1px rgba(255, 255, 255, 0.95),
+        0 1px 2px rgba(255, 255, 255, 0.9),
+        0 0 28px rgba(255, 255, 255, 0.75),
+        0 2px 14px rgba(42, 51, 53, 0.18);
+    }
+
+    .hero h1 span {
+      display: block;
+      font-style: italic;
+      font-family: "Literata", serif;
+      font-weight: 600;
+      font-size: 0.45em;
+      letter-spacing: 0.08em;
+      /* 略加深渐变两端，避免在浅背景上发虚 */
+      background: linear-gradient(120deg, #e85a6b, #6b8fd4);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-top: 0.5rem;
+      transform: translateX(-10px);
+      text-shadow: none;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.85)) drop-shadow(0 1px 3px rgba(42, 51, 53, 0.2));
+    }
+
+    .hero-lead {
+      max-width: 32rem;
+      margin: 2rem auto 0;
+      color: var(--ink);
+      font-size: 1.15rem;
+      font-weight: 500;
+      line-height: 1.75;
+      opacity: 0;
+      animation: fade-up 1.2s var(--ease-out-expo) 0.6s forwards;
+      text-shadow:
+        0 0 1px rgba(255, 255, 255, 0.9),
+        0 1px 0 rgba(255, 255, 255, 0.85),
+        0 0 20px rgba(255, 255, 255, 0.65),
+        0 2px 10px rgba(42, 51, 53, 0.12);
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(40px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      animation: fade-up 1s var(--ease-out-expo) 1s forwards;
+    }
+
+    .scroll-hint span {
+      font-family: "Sora", sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-shadow: 0 0 12px rgba(255, 255, 255, 0.85), 0 1px 2px rgba(42, 51, 53, 0.15);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--slate), transparent);
+      animation: scroll-drop 2s var(--ease-in-out-sine) infinite;
+      transform-origin: top;
+    }
+
+    @keyframes scroll-drop {
+      0% { transform: scaleY(0); opacity: 0; }
+      50% { transform: scaleY(1); opacity: 1; }
+      100% { transform: scaleY(1) translateY(100%); opacity: 0; }
+    }
+
+    /* --- 区块通用 --- */
+    section {
+      padding: clamp(5rem, 15vw, 8rem) clamp(1.5rem, 5vw, 4rem);
+      position: relative;
+      z-index: 10;
+    }
+
+    .section-label {
+      font-family: "Sora", sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--macaron-coral);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .section-label::after {
+      content: "";
+      height: 1px;
+      flex-grow: 1;
+      max-width: 100px;
+      background: linear-gradient(to right, var(--macaron-coral), transparent);
+    }
+
+    h2 {
+      font-family: "Sora", sans-serif;
+      font-weight: 400;
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: -0.02em;
+      color: var(--slate);
+      margin: 0 0 2rem;
+    }
+
+    /* 滚动浮现动效 */
+    .reveal {
+      opacity: 0;
+      transform: translateY(60px) scale(0.96);
+      transition: all 1.2s var(--ease-out-expo);
+      will-change: transform, opacity;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* 交错浮现 */
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+
+    /* --- 作品网格 --- */
+    .works-head {
+      max-width: 76rem;
+      margin: 0 auto 4rem;
+    }
+
+    .works-grid {
+      max-width: 76rem;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: clamp(2rem, 4vw, 3rem);
+    }
+
+    .work-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      padding: 12px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.04);
+      transition: all 0.6s var(--ease-spring);
+      position: relative;
+      z-index: 1;
+    }
+
+    .work-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 
+        0 30px 60px rgba(0,0,0,0.08),
+        0 0 0 2px rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.5);
+      z-index: 2;
+    }
+
+    .work-cover {
+      aspect-ratio: 4 / 3;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .work-cover-inner {
+      position: absolute;
+      inset: -10%;
+      background-size: cover;
+      background-position: center;
+      transition: transform 1.2s var(--ease-out-expo);
+      will-change: transform;
+    }
+
+    .work-card:hover .work-cover-inner {
+      transform: scale(1.1) rotate(1deg);
+    }
+
+    /* 马卡龙色占位封面 */
+    .cover-1 .work-cover-inner { background: linear-gradient(135deg, var(--macaron-blue), var(--macaron-pink)); }
+    .cover-2 .work-cover-inner { background: linear-gradient(135deg, var(--macaron-purple), var(--macaron-green)); }
+    .cover-3 .work-cover-inner { background: linear-gradient(135deg, var(--macaron-yellow), var(--macaron-blue)); }
+    .cover-4 .work-cover-inner { background: linear-gradient(135deg, var(--macaron-pink), var(--macaron-yellow)); }
+
+    /* 播放按钮 */
+    .work-play {
+      position: absolute;
+      bottom: 1rem; right: 1rem;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(8px);
+      display: grid;
+      place-items: center;
+      z-index: 2;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      transition: all 0.6s var(--ease-spring);
+      transform: scale(0.9) translateY(10px);
+      opacity: 0;
+    }
+
+    .work-card:hover .work-play {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+      background: rgba(255, 255, 255, 1);
+    }
+
+    .work-play svg {
+      width: 16px; height: 16px;
+      margin-left: 3px;
+      fill: var(--macaron-coral);
+      transition: transform 0.3s;
+    }
+    
+    .work-card:hover .work-play:hover svg {
+      transform: scale(1.2);
+    }
+
+    .work-meta {
+      padding: 1.5rem 0.5rem 0.5rem;
+    }
+
+    .work-meta h3 {
+      font-family: "Sora", sans-serif;
+      font-weight: 500;
+      font-size: 1.1rem;
+      margin: 0;
+      letter-spacing: -0.01em;
+      color: var(--slate);
+      transition: color 0.3s;
+    }
+
+    .work-card:hover .work-meta h3 {
+      color: var(--macaron-coral);
+    }
+
+    .work-meta p {
+      margin: 0.5rem 0 0;
+      font-size: 0.85rem;
+      color: rgba(74, 93, 96, 0.7);
+    }
+
+    /* --- 合作区块 --- */
+    .coop {
+      max-width: 54rem;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .coop-card {
+      margin-top: 3rem;
+      padding: clamp(3rem, 6vw, 4rem);
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(162, 178, 194, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 卡片内部柔和光晕 */
+    .coop-card::before {
+      content: "";
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.8) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .coop-list {
+      list-style: none;
+      margin: 2rem auto 0;
+      padding: 0;
+      text-align: left;
+      display: inline-block;
+    }
+
+    .coop-list li {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+      color: var(--slate);
+    }
+
+    .coop-list li::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0.45em;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--macaron-coral), #FF8A8A);
+      box-shadow: 0 2px 8px var(--shadow-color);
+    }
+
+    /* 丝滑按钮 */
+    .btn-mail {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-top: 3rem;
+      padding: 1.2rem 2.5rem;
+      font-family: "Sora", sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--slate);
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255,255,255,1);
+      border-radius: 100px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s var(--ease-spring);
+      box-shadow: 
+        0 10px 30px rgba(162, 178, 194, 0.2),
+        inset 0 -3px 0 rgba(0,0,0,0.05);
+      z-index: 1;
+    }
+
+    .btn-mail::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, var(--macaron-pink), var(--macaron-blue));
+      opacity: 0;
+      z-index: -1;
+      transition: opacity 0.4s ease;
+    }
+
+    .btn-mail:hover {
+      transform: translateY(-5px) scale(1.02);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 15px 40px rgba(162, 178, 194, 0.4);
+    }
+
+    .btn-mail:hover::before {
+      opacity: 1;
+    }
+
+    footer {
+      padding: 4rem 1.5rem;
+      text-align: center;
+      font-family: "Sora", sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--slate);
+      opacity: 0.6;
+    }
+
+    /* 自定义光标 */
+    .cursor-dot,
+    .cursor-outline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--macaron-coral);
+    }
+
+    .cursor-outline {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(255, 168, 168, 0.5);
+      transition: width 0.2s, height 0.2s, background-color 0.2s;
+    }
+    
+    @media (hover: none) and (pointer: coarse) {
+      .cursor-dot, .cursor-outline { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 全页马卡龙动态背景（滚动离开首屏后即为该效果） -->
+  <div class="mesh-background" aria-hidden="true"></div>
+  <!-- 噪点质感 -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+  
+  <!-- 漂浮粒子 -->
+  <div class="particles" id="particles"></div>
+
+  <!-- 鼠标光标 -->
+  <div class="cursor-dot" id="cursor-dot"></div>
+  <div class="cursor-outline" id="cursor-outline"></div>
+
+  <header class="nav" id="nav">
+    <span class="nav-brand">Jumboo</span>
+    <nav aria-label="主导航">
+      <ul class="nav-links">
+        <li><a href="#works">作品</a></li>
+        <li><a href="#coop">合作</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="hero" aria-labelledby="hero-title">
+      <!-- 背景视频仅限首屏区域，下方区块露出 mesh-background -->
+      <div class="hero-video-layer" aria-hidden="true">
+        <video
+          class="bg-video"
+          id="bgVideo"
+          muted
+          loop
+          playsinline
+          preload="auto"
+        >
+          <source src="back.mp4" type="video/mp4" />
+        </video>
+        <div class="bg-video-blend"></div>
+      </div>
+      <div class="hero-inner">
+        <span class="hero-tag">AI 影像 · 叙事与想象</span>
+        <h1 id="hero-title">
+          阿布
+          <span>Jumboo</span>
+        </h1>
+        <p class="hero-lead">
+          用生成式影像探索光、几何与情绪。<br/>
+          在这里浏览我的创作片段，也欢迎聊聊下一次视觉实验。
+        </p>
+      </div>
+      <div class="scroll-hint">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <section id="works" aria-labelledby="works-title">
+      <div class="works-head">
+        <p class="section-label reveal">Selected Works</p>
+        <h2 id="works-title" class="reveal delay-1">个人作品</h2>
+        <p class="reveal delay-2" style="color: rgba(74, 93, 96, 0.8); font-size: 1.1rem;">
+          点击卡片进入播放页（预览中为占位链接，接入正式路由后替换即可）。
+        </p>
+      </div>
+      <div class="works-grid">
+        <a class="work-card cover-1 reveal delay-1" href="play.html?id=1">
+          <div class="work-cover">
+            <div class="work-cover-inner"></div>
+            <span class="work-play" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </div>
+          <div class="work-meta">
+            <h3>雾岛日出</h3>
+            <p>实验短片 · 2025</p>
+          </div>
+        </a>
+        <a class="work-card cover-2 reveal delay-2" href="play.html?id=2">
+          <div class="work-cover">
+            <div class="work-cover-inner"></div>
+            <span class="work-play" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </div>
+          <div class="work-meta">
+            <h3>几何回信</h3>
+            <p>品牌概念片 · 2025</p>
+          </div>
+        </a>
+        <a class="work-card cover-3 reveal delay-3" href="play.html?id=3">
+          <div class="work-cover">
+            <div class="work-cover-inner"></div>
+            <span class="work-play" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </div>
+          <div class="work-meta">
+            <h3>沉默的拱门</h3>
+            <p>MV 片段 · 2024</p>
+          </div>
+        </a>
+        <a class="work-card cover-4 reveal delay-4" href="play.html?id=4">
+          <div class="work-cover">
+            <div class="work-cover-inner"></div>
+            <span class="work-play" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </div>
+          <div class="work-meta">
+            <h3>褪色塔楼</h3>
+            <p>艺术装置纪录 · 2024</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section id="coop" class="coop" aria-labelledby="coop-title">
+      <p class="section-label reveal">Collaboration</p>
+      <h2 id="coop-title" class="reveal delay-1">合作方式</h2>
+      <p class="reveal delay-2" style="color: rgba(74, 93, 96, 0.8); font-size: 1.1rem; max-width: 36rem; margin: 0 auto;">
+        接受品牌短片、视觉概念、演出影像与展览内容等委托。周期与报价依项目而定，欢迎先写一封简单的信。
+      </p>
+      <div class="coop-card reveal delay-3">
+        <ul class="coop-list">
+          <li>商业委托与联名创作</li>
+          <li>艺术驻留与展览影像</li>
+          <li>工作坊与创作分享（线上/线下）</li>
+        </ul>
+        <br/>
+        <a class="btn-mail hover-target" href="mailto:hello@jumboo.studio">
+          发起邮件联系
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>© Jumboo 阿布 · Immersive Experience</footer>
+
+  <script>
+    (function () {
+      // 0. 背景视频：仅在首屏 Hero 内；离开视口暂停以省资源；减少动效时只显示静帧
+      var bgVideo = document.getElementById("bgVideo");
+      var heroEl = document.getElementById("hero");
+      var reduceMotionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+      var heroInView = true;
+
+      function markVideoReady() {
+        if (bgVideo) bgVideo.classList.add("is-ready");
+      }
+
+      function syncBgVideoPlayback() {
+        if (!bgVideo) return;
+        if (reduceMotionMq.matches) {
+          bgVideo.pause();
+          return;
+        }
+        if (!heroInView) {
+          bgVideo.pause();
+          return;
+        }
+        var playPromise = bgVideo.play();
+        if (playPromise && typeof playPromise.catch === "function") {
+          playPromise.catch(function () {});
+        }
+      }
+
+      if (bgVideo) {
+        bgVideo.addEventListener(
+          "canplay",
+          function () {
+            markVideoReady();
+            syncBgVideoPlayback();
+          },
+          { once: true }
+        );
+        bgVideo.addEventListener("error", function () {
+          bgVideo.classList.remove("is-ready");
+        });
+        reduceMotionMq.addEventListener("change", syncBgVideoPlayback);
+        if (bgVideo.readyState >= 3) {
+          markVideoReady();
+          syncBgVideoPlayback();
+        }
+      }
+
+      if (heroEl && typeof IntersectionObserver !== "undefined") {
+        var heroObserver = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              heroInView = e.isIntersecting;
+              syncBgVideoPlayback();
+            });
+          },
+          { threshold: 0 }
+        );
+        heroObserver.observe(heroEl);
+      }
+
+      // 1. 生成漂浮粒子
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 15;
+      for(let i=0; i<particleCount; i++) {
+        const p = document.createElement('div');
+        p.classList.add('particle');
+        // 随机属性
+        const size = Math.random() * 6 + 2;
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        p.style.left = `${Math.random() * 100}vw`;
+        p.style.animationDuration = `${Math.random() * 10 + 10}s`;
+        p.style.animationDelay = `${Math.random() * 10}s`;
+        particlesContainer.appendChild(p);
+      }
+
+      // 2. 自定义鼠标光标逻辑
+      const cursorDot = document.getElementById("cursor-dot");
+      const cursorOutline = document.getElementById("cursor-outline");
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let outlineX = mouseX;
+      let outlineY = mouseY;
+
+      window.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorDot.style.left = `${mouseX}px`;
+        cursorDot.style.top = `${mouseY}px`;
+      });
+
+      // 缓动动画让外圈跟随更丝滑
+      function renderCursor() {
+        outlineX += (mouseX - outlineX) * 0.15;
+        outlineY += (mouseY - outlineY) * 0.15;
+        cursorOutline.style.left = `${outlineX}px`;
+        cursorOutline.style.top = `${outlineY}px`;
+        requestAnimationFrame(renderCursor);
+      }
+      requestAnimationFrame(renderCursor);
+
+      // 交互元素光标放大特效
+      const hoverTargets = document.querySelectorAll('a, button, .hover-target');
+      hoverTargets.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursorOutline.style.width = '60px';
+          cursorOutline.style.height = '60px';
+          cursorOutline.style.backgroundColor = 'rgba(255, 168, 168, 0.1)';
+        });
+        el.addEventListener('mouseleave', () => {
+          cursorOutline.style.width = '40px';
+          cursorOutline.style.height = '40px';
+          cursorOutline.style.backgroundColor = 'transparent';
+        });
+      });
+
+      // 3. 导航栏滚动磨砂背景
+      const nav = document.getElementById("nav");
+      function onScroll() {
+        nav.classList.toggle("scrolled", window.scrollY > 50);
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+
+      // 4. 滚入视口时触发交错进入动效
+      const reveals = document.querySelectorAll(".reveal");
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              // 可选：如果不希望重复触发，解绑
+              // obs.unobserve(e.target);
+            }
+          });
+        },
+        { rootMargin: "0px 0px -10% 0px", threshold: 0.1 }
+      );
+      reveals.forEach((el) => obs.observe(el));
+    })();
+  </script>
+</body>
+</html>

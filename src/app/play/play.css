@@ -1,0 +1,92 @@
+/* 播放页：由 play.html 迁入，作用域限定在 .play-root 避免污染首页 body */
+
+.play-root {
+  --cream-play: #f4efe6;
+  --slate-play: #3d4f52;
+  --ease-play: cubic-bezier(0.16, 1, 0.3, 1);
+
+  box-sizing: border-box;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  font-family: var(--font-literata), Georgia, serif;
+  background: linear-gradient(165deg, #eef6f3, var(--cream-play));
+  color: #2a3335;
+}
+
+.play-root *,
+.play-root *::before,
+.play-root *::after {
+  box-sizing: border-box;
+}
+
+.play-back {
+  font-family: var(--font-sora), sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--slate-play);
+  text-decoration: none;
+  margin-bottom: 2rem;
+  opacity: 0.75;
+  transition:
+    opacity 0.35s var(--ease-play),
+    transform 0.35s var(--ease-play);
+}
+
+.play-back:hover {
+  opacity: 1;
+  transform: translateX(-4px);
+}
+
+.play-stage {
+  width: min(100%, 880px);
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(145deg, #c5e0d8, #e8b8a8, #d4c4e0);
+  border-radius: 2px;
+  box-shadow: 0 24px 48px rgba(61, 79, 82, 0.15);
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.play-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.25),
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+.play-placeholder {
+  font-family: var(--font-sora), sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: rgba(42, 51, 53, 0.65);
+  text-align: center;
+  padding: 1rem;
+  z-index: 1;
+}
+
+.play-root h1 {
+  font-family: var(--font-sora), sans-serif;
+  font-weight: 400;
+  font-size: 1.35rem;
+  margin: 1.5rem 0 0.35rem;
+  color: var(--slate-play);
+}
+
+.play-id-tag {
+  font-size: 0.85rem;
+  opacity: 0.65;
+}
