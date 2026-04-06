@@ -376,7 +376,7 @@ export default function HomePage() {
           })}
         </section>
 
-        {/* 合作区之前：影视类荣誉小记（数据见 src/data/honors.json） */}
+        {/* 合作区之前：AIGC 相关荣誉（数据见 src/data/honors.json） */}
         <section id="honors" className="honors" aria-labelledby="honors-title">
           <div className="honors-head">
             <p className="section-label reveal">Honors</p>
@@ -384,7 +384,7 @@ export default function HomePage() {
               荣誉小记
             </h2>
             <p className="honors-lead reveal delay-2">
-              过往参与院线项目的奖项与提名记录，与当下 AIGC 创作并行的一小段足迹。
+              各平台 AI 影像赛事、品牌活动与官方邀约记录，与创作并行的一小段足迹。
             </p>
           </div>
           <div className="honors-grid">

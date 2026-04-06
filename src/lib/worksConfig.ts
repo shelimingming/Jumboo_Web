@@ -1,6 +1,6 @@
 import worksData from "@/data/works.json";
 
-/** 作品集数据源：评集条目与分类见 src/data/works.json（与运营表格同步，可补封面与 videoSrc） */
+/** 作品集数据源：条目与分类见 src/data/works.json；封面与成片统一使用 CDN 路径 /Jumboo/work/ */
 
 /** 播放页所需字段：与 play/page 内原 WORKS 条目一致 */
 export type WorkPlayerConfig = {

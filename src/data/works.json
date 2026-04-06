@@ -2,22 +2,30 @@
   "categories": [
     {
       "id": "narrative-shorts",
-      "titleZh": "长叙事短片",
+      "titleZh": "叙事短片",
       "titleEn": "Narrative Shorts",
       "works": [
         {
-          "id": "soul-terracotta",
-          "title": "俑魂",
-          "subtitle": "25年9月作品，B站「AI影响征集大赛」获奖作品，全网播放量破20w+",
-          "coverClass": "cover-1",
-          "delayClass": "delay-1"
-        },
-        {
           "id": "alhambra-memories",
           "title": "阿尔罕布拉宫的回忆",
-          "subtitle": "25年8月作品，爱奇艺「与AI共生」大赛获奖作品，原创剧本杀作品改编",
+          "subtitle": "原创剧本杀作品改编，首个完整动画作品，获爱奇艺「与AI共生」大赛入围奖（2025.1），5分钟体验一场中世纪的奇幻爱情之旅",
           "coverClass": "cover-2",
-          "delayClass": "delay-2"
+          "delayClass": "delay-1",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/阿尔罕布拉宫的回忆.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/阿尔罕布拉宫的回忆.mp4"
+          }
+        },
+        {
+          "id": "soul-terracotta",
+          "title": "俑魂",
+          "subtitle": "首个长叙事作品，突围5800+作品，获B站&电影频道「AI影像征集大赛」潜力奖（2025.11），全网播放量破20w，获抖音优质作者签约邀请",
+          "coverClass": "cover-1",
+          "delayClass": "delay-2",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/蛹魂.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/蛹魂.mp4"
+          }
         }
       ]
     },
@@ -29,23 +37,35 @@
         {
           "id": "yangzhou-iqiyi-park",
           "title": "扬州爱奇艺乐园",
-          "subtitle": "参与爱奇艺尖叫之夜，官号首页宣传，粉丝增长100%+",
+          "subtitle": "爱奇艺乐园官方AI宣传视频，参与爱奇艺尖叫之夜等线下活动，大屏轮播，官号粉丝增长100%+",
           "coverClass": "cover-1",
-          "delayClass": "delay-1"
+          "delayClass": "delay-1",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/爱奇艺乐园.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/爱奇艺乐园.mp4"
+          }
         },
         {
           "id": "yiner-30",
           "title": "YINER 30周年「自然之序」",
-          "subtitle": "音儿三十周年系列推广，品牌首个100%AI宣传视频",
+          "subtitle": "音儿三十周年系列推广，品牌内部首个AIGC宣传推广视频",
           "coverClass": "cover-2",
-          "delayClass": "delay-2"
+          "delayClass": "delay-2",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/自然之序列.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/自然之序列.mp4"
+          }
         },
         {
           "id": "cloud-in-heart",
           "title": "我心中的那朵云",
-          "subtitle": "爱奇艺全员大会加油视频",
+          "subtitle": "爱奇艺全员大会压轴视频，以「梦想」为线，串联初心，凝心聚力，鼓舞全员再启创业新程",
           "coverClass": "cover-3",
-          "delayClass": "delay-3"
+          "delayClass": "delay-3",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/我心中的一朵云.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/我心中的一朵云.mp4"
+          }
         }
       ]
     },
@@ -57,16 +77,24 @@
         {
           "id": "victor-trailer",
           "title": "维克多（预告）",
-          "subtitle": "两天沉浸式体验暗夜逆袭！剧本、分镜、视频、配音全AI制作！",
+          "subtitle": "沉浸式体验暗夜逆袭！两天完成剧本、分镜、视频、配音全AI制作",
           "coverClass": "cover-4",
-          "delayClass": "delay-1"
+          "delayClass": "delay-1",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/维克多.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/维克多.mp4"
+          }
         },
         {
           "id": "cinderella-clip",
           "title": "辛德瑞拉嫁错郎（切片）",
-          "subtitle": "首个参与制作的出海短剧项目，TikTok即将上线",
+          "subtitle": "首次参与制作的出海短剧项目，TikTok即将上线",
           "coverClass": "cover-1",
-          "delayClass": "delay-2"
+          "delayClass": "delay-2",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/辛德瑞拉嫁错郎.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/辛德瑞拉嫁错郎.mp4"
+          }
         }
       ]
     },
@@ -76,72 +104,88 @@
       "titleEn": "Original Healing Series",
       "works": [
         {
+          "id": "ricecake-dream",
+          "title": "年糕的梦",
+          "subtitle": "抖音「AI新春游园会」官方定向邀约作品（抖音&抖音精选，2026.2），治愈系金毛小狗年糕首秀",
+          "coverClass": "cover-4",
+          "delayClass": "delay-1",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/年糕的梦.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/年糕的梦.mp4"
+          }
+        },
+        {
+          "id": "ricecake-new-friend",
+          "title": "年糕的新朋友",
+          "subtitle": "抖音精选，打破标签与偏见",
+          "coverClass": "cover-1",
+          "delayClass": "delay-2",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/年糕的新朋友.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/年糕的新朋友.mp4"
+          }
+        },
+        {
           "id": "ricecake-colorwalk",
           "title": "年糕的color walk",
-          "subtitle": "做不被定义的那朵花",
+          "subtitle": "抖音精选，做不被定义的那朵花",
           "coverClass": "cover-photo",
-          "delayClass": "delay-1",
-          "coverImage": "https://cdn.xyfit.top/Jumboo/年糕的colorwalk.jpg",
+          "delayClass": "delay-3",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/年糕的colorwalk.jpg",
           "player": {
-            "videoSrc": "https://cdn.xyfit.top/Jumboo/年糕的colorwalk.mp4"
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/年糕的colorwalk.mp4"
           }
         },
         {
           "id": "ricecake-vacation",
           "title": "年糕的假期",
-          "subtitle": "一场狗狗与春天的粉色之约",
+          "subtitle": "抖音精选，一场狗狗与春天的粉色之约",
           "coverClass": "cover-2",
-          "delayClass": "delay-2",
-          "coverImage": "https://cdn.xyfit.top/Jumboo/年糕的假期.jpg",
+          "delayClass": "delay-1",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/年糕的假期2.jpg",
           "player": {
-            "videoSrc": "https://cdn.xyfit.top/Jumboo/年糕的colorwalk.mp4"
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/年糕的假期2.mp4"
           }
         },
         {
           "id": "ricecake-performance",
           "title": "年糕的演奏",
-          "subtitle": "一曲琴音，寄托心底最深的思念",
+          "subtitle": "一曲琴音，寄托心底最深处的思念",
           "coverClass": "cover-3",
-          "delayClass": "delay-3",
-          "coverImage": "https://cdn.xyfit.top/Jumboo/年糕的演奏.jpg",
+          "delayClass": "delay-2",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/年糕的演奏2.jpg",
           "player": {
-            "videoSrc": "https://cdn.xyfit.top/Jumboo/年糕的colorwalk.mp4"
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/年糕的演奏2.mp4"
           }
-        },
-        {
-          "id": "ricecake-dream",
-          "title": "年糕的梦",
-          "subtitle": "抖音官方邀约作品",
-          "coverClass": "cover-4",
-          "delayClass": "delay-1"
-        },
-        {
-          "id": "ricecake-new-friend",
-          "title": "年糕的新朋友",
-          "subtitle": "打破标签与偏见",
-          "coverClass": "cover-1",
-          "delayClass": "delay-2"
         }
       ]
     },
     {
       "id": "other-works",
-      "titleZh": "其他作品",
+      "titleZh": "其他人气作品",
       "titleEn": "Other Works",
       "works": [
         {
           "id": "dongda-creative",
           "title": "东大文创",
-          "subtitle": "复刻爆火全网的《喜鹊谋杀案》片头风格",
+          "subtitle": "复刻爆火全网的《喜鹊谋杀案》片头风格，获官号点赞",
           "coverClass": "cover-3",
-          "delayClass": "delay-1"
+          "delayClass": "delay-1",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/东大.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/东大.mp4"
+          }
         },
         {
           "id": "gemini-trailer",
           "title": "双子星（预告）",
-          "subtitle": "25年7月作品，首个科幻作品，获联想「双子星·平行宇宙」新星奖",
+          "subtitle": "首个科幻作品，获联想「双子星·平行宇宙」新星奖（2025.9）",
           "coverClass": "cover-4",
-          "delayClass": "delay-2"
+          "delayClass": "delay-2",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/双子星.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/双子星.mp4"
+          }
         }
       ]
     }

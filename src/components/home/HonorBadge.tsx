@@ -7,6 +7,8 @@ export type HonorItem = {
   titleZh: string;
   titleEn: string;
   status: "nominated" | "won";
+  /** 有值时覆盖默认「获奖」「提名」，用于官方邀约等非奖项类荣誉 */
+  statusOverrideZh?: string;
   categoryZh: string;
   categoryEn: string;
   orgLineZh: string;
@@ -16,13 +18,14 @@ export type HonorItem = {
 
 export function HonorBadge(props: { item: HonorItem; delayClass: string }) {
   const { item, delayClass } = props;
-  const statusLabel = item.status === "won" ? "获奖" : "提名";
+  const statusLabel =
+    item.statusOverrideZh ?? (item.status === "won" ? "获奖" : "提名");
 
   return (
     <article
       className={`honor-badge reveal ${delayClass}`}
       data-macaron={item.macaron}
-      aria-label={`${item.titleZh} ${statusLabel} ${item.categoryZh}`}
+      aria-label={`${item.titleZh} ${statusLabel} ${item.categoryZh}`.trim()}
     >
       <div className="honor-badge-inner">
         <div className="honor-badge-copy">
