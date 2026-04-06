@@ -6,6 +6,7 @@ import type { WorkPlayerConfig } from "@/lib/worksConfig";
 import { portfolioCategories } from "@/lib/worksConfig";
 import honorsData from "@/data/honors.json";
 import { HonorBadge, type HonorItem } from "./HonorBadge";
+import { BackToTop } from "./BackToTop";
 import { WorkCard } from "./WorkCard";
 import { WorkVideoLightbox } from "./WorkVideoLightbox";
 
@@ -445,6 +446,9 @@ export default function HomePage() {
         player={lightbox?.player ?? null}
         onClose={() => setLightbox(null)}
       />
+
+      {/* 长页滚动辅助：右下角玻璃风回到顶部（样式见 home.css .back-to-top） */}
+      <BackToTop />
     </>
   );
 }

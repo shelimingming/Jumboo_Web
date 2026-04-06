@@ -427,11 +427,15 @@ body::-webkit-scrollbar { display: none; }
   100% { transform: scaleY(1) translateY(100%); opacity: 0; }
 }
 
-/* --- 区块通用 --- */
+/* --- 区块通用：垂直留白；相邻两个 section 再单独收「上 padding」，避免荣誉/合作等大标题之间空白加倍 --- */
 section {
-  padding: clamp(5rem, 15vw, 8rem) clamp(1.5rem, 5vw, 4rem);
+  padding: clamp(2.5rem, 6vw, 3.75rem) clamp(1.5rem, 5vw, 4rem);
   position: relative;
   z-index: 10;
+}
+
+section + section {
+  padding-top: clamp(1.75rem, 4vw, 2.75rem);
 }
 
 .section-label {
@@ -460,7 +464,8 @@ h2 {
   font-size: clamp(2rem, 5vw, 3rem);
   letter-spacing: -0.02em;
   color: var(--slate);
-  margin: 0 0 2rem;
+  /* 与下方正文/网格略拉近，区块间距主要由 section padding 承担 */
+  margin: 0 0 1.35rem;
 }
 
 /* 滚动浮现动效 */
@@ -485,7 +490,7 @@ h2 {
 /* --- 作品网格 --- */
 .works-head {
   max-width: 76rem;
-  margin: 0 auto 4rem;
+  margin: 0 auto 2.75rem;
 }
 
 /* 作品集分类 Tab */
@@ -534,7 +539,7 @@ h2 {
 
 .works-category-block {
   max-width: 76rem;
-  margin: 0 auto 3.5rem;
+  margin: 0 auto 2.5rem;
 }
 
 .works-category-block:last-of-type {
@@ -923,7 +928,7 @@ h2 {
 }
 
 .honors-head {
-  margin-bottom: clamp(2.25rem, 5vw, 3rem);
+  margin-bottom: clamp(1.5rem, 3.5vw, 2.25rem);
 }
 
 .honors-lead {
@@ -1219,5 +1224,68 @@ footer {
   text-transform: uppercase;
   color: var(--slate);
   opacity: 0.6;
+}
+
+/* --- 右下角「回到顶部」：与导航磨砂、作品 Tab 同系的玻璃圆钮 --- */
+.back-to-top {
+  position: fixed;
+  right: clamp(1rem, 4vw, 2rem);
+  bottom: clamp(1rem, 4vw, 2rem);
+  z-index: 110;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.42);
+  color: var(--slate);
+  cursor: pointer;
+  box-shadow: 0 10px 28px var(--shadow-soft);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(12px) scale(0.94);
+  transition:
+    opacity 0.45s var(--ease-out-expo),
+    visibility 0.45s var(--ease-out-expo),
+    transform 0.45s var(--ease-out-expo),
+    background 0.35s var(--ease-out-expo),
+    border-color 0.35s var(--ease-out-expo),
+    box-shadow 0.35s var(--ease-out-expo),
+    color 0.35s var(--ease-out-expo);
+}
+
+.back-to-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.back-to-top:hover {
+  background: rgba(255, 255, 255, 0.62);
+  border-color: rgba(255, 168, 168, 0.45);
+  color: var(--macaron-coral);
+  box-shadow: 0 14px 36px var(--shadow-lift);
+}
+
+.back-to-top:focus-visible {
+  outline: 2px solid var(--macaron-coral);
+  outline-offset: 3px;
+}
+
+.back-to-top-icon {
+  display: block;
+  margin-top: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top {
+    transition-duration: 0.01ms;
+  }
 }
 
