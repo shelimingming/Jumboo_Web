@@ -936,15 +936,31 @@ h2 {
   color: rgba(74, 93, 96, 0.82);
 }
 
+/* 荣誉卡片：桌面端单行排布（6 张等分）；窄屏横向滑动；超窄屏改回单列 */
 .honors-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(172px, 1fr));
-  gap: clamp(1rem, 2.2vw, 1.35rem);
+  display: flex;
+  flex-wrap: nowrap;
+  gap: clamp(0.65rem, 1.5vw, 1.1rem);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.2rem;
+  scrollbar-gutter: stable;
+}
+
+.honors-grid .honor-badge {
+  flex: 1 1 0;
+  min-width: 140px;
 }
 
 @media (max-width: 420px) {
   .honors-grid {
+    display: grid;
     grid-template-columns: 1fr;
+    overflow-x: visible;
+  }
+
+  .honors-grid .honor-badge {
+    min-width: 0;
   }
 }
 
@@ -1187,63 +1203,11 @@ h2 {
   color: rgba(74, 93, 96, 0.82);
 }
 
-/* 收尾句与按钮间距：略小于通用 btn-mail 顶边距，成组更紧凑 */
-.coop-card .btn-mail {
-  margin-top: 1.85rem;
-}
-
 @media (max-width: 420px) {
   .coop-contact-row {
     grid-template-columns: 1fr;
     gap: 0.25rem;
   }
-}
-
-/* 丝滑按钮 */
-.btn-mail {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-top: 3rem;
-  padding: 1.2rem 2.5rem;
-  font-family: var(--font-sora), sans-serif;
-  font-size: 0.9rem;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: var(--slate);
-  background: rgba(255, 255, 255, 0.8);
-  /* 去掉纯白描边，避免与按钮底色叠成「双层花边」感 */
-  border: none;
-  border-radius: 100px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.5s var(--ease-spring);
-  box-shadow: 0 10px 30px rgba(162, 178, 194, 0.2);
-  z-index: 1;
-}
-
-.btn-mail::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg, var(--macaron-pink), var(--macaron-blue));
-  opacity: 0;
-  z-index: -1;
-  transition: opacity 0.4s ease;
-}
-
-.btn-mail:hover {
-  transform: translateY(-5px) scale(1.02);
-  color: #fff;
-  border-color: transparent;
-  box-shadow: 0 15px 40px rgba(162, 178, 194, 0.4);
-}
-
-.btn-mail:hover::before {
-  opacity: 1;
 }
 
 footer {

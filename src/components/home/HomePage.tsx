@@ -433,26 +433,6 @@ export default function HomePage() {
                 <dd>AI合作 + 需求类别</dd>
               </div>
             </dl>
-            <a
-              className="btn-mail"
-              href="mailto:493182574@qq.com?subject=AI%E5%90%88%E4%BD%9C%20%2B%20%E9%9C%80%E6%B1%82%E7%B1%BB%E5%88%AB"
-            >
-              发邮件聊聊
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden
-              >
-                <line x1="22" y1="2" x2="11" y2="13" />
-                <polygon points="22 2 15 22 11 13 2 9 22 2" />
-              </svg>
-            </a>
           </div>
         </section>
       </main>

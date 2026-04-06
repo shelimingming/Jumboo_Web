@@ -6,17 +6,6 @@
       "titleEn": "Narrative Shorts",
       "works": [
         {
-          "id": "alhambra-memories",
-          "title": "阿尔罕布拉宫的回忆",
-          "subtitle": "原创剧本杀作品改编，首个完整动画作品，获爱奇艺「与AI共生」大赛入围奖（2025.1），5分钟体验一场中世纪的奇幻爱情之旅",
-          "coverClass": "cover-2",
-          "delayClass": "delay-1",
-          "coverImage": "https://cdn.xyfit.top/Jumboo/work/阿尔罕布拉宫的回忆.jpg",
-          "player": {
-            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/阿尔罕布拉宫的回忆.mp4"
-          }
-        },
-        {
           "id": "soul-terracotta",
           "title": "俑魂",
           "subtitle": "首个长叙事作品，突围5800+作品，获B站&电影频道「AI影像征集大赛」潜力奖（2025.11），全网播放量破20w，获抖音优质作者签约邀请",
@@ -25,6 +14,17 @@
           "coverImage": "https://cdn.xyfit.top/Jumboo/work/蛹魂.jpg",
           "player": {
             "videoSrc": "https://cdn.xyfit.top/Jumboo/work/蛹魂.mp4"
+          }
+        },
+        {
+          "id": "alhambra-memories",
+          "title": "阿尔罕布拉宫的回忆",
+          "subtitle": "原创剧本杀作品改编，首个完整动画作品，获爱奇艺「与AI共生」大赛入围奖（2025.10），5分钟体验一场中世纪的奇幻爱情之旅",
+          "coverClass": "cover-2",
+          "delayClass": "delay-1",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/阿尔罕布拉宫的回忆.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/阿尔罕布拉宫的回忆.mp4"
           }
         }
       ]
@@ -46,17 +46,6 @@
           }
         },
         {
-          "id": "yiner-30",
-          "title": "YINER 30周年「自然之序」",
-          "subtitle": "音儿三十周年系列推广，品牌内部首个AIGC宣传推广视频",
-          "coverClass": "cover-2",
-          "delayClass": "delay-2",
-          "coverImage": "https://cdn.xyfit.top/Jumboo/work/自然之序列.jpg",
-          "player": {
-            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/自然之序列.mp4"
-          }
-        },
-        {
           "id": "cloud-in-heart",
           "title": "我心中的那朵云",
           "subtitle": "爱奇艺全员大会压轴视频，以「梦想」为线，串联初心，凝心聚力，鼓舞全员再启创业新程",
@@ -65,6 +54,17 @@
           "coverImage": "https://cdn.xyfit.top/Jumboo/work/我心中的一朵云.jpg",
           "player": {
             "videoSrc": "https://cdn.xyfit.top/Jumboo/work/我心中的一朵云.mp4"
+          }
+        },
+        {
+          "id": "yiner-30",
+          "title": "YINER 30周年「自然之序」",
+          "subtitle": "音儿三十周年系列推广，品牌内部首个AIGC宣传推广视频",
+          "coverClass": "cover-2",
+          "delayClass": "delay-2",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/自然之序列.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/自然之序列.mp4"
           }
         }
       ]
@@ -106,7 +106,7 @@
         {
           "id": "ricecake-dream",
           "title": "年糕的梦",
-          "subtitle": "抖音「AI新春游园会」官方定向邀约作品（抖音&抖音精选，2026.2），治愈系金毛小狗年糕首秀",
+          "subtitle": "抖音「AI新春游园会」官方定向邀约作品 治愈系金毛小狗年糕首秀",
           "coverClass": "cover-4",
           "delayClass": "delay-1",
           "coverImage": "https://cdn.xyfit.top/Jumboo/work/年糕的梦.jpg",
