@@ -254,6 +254,8 @@ export default function HomePage() {
               loop
               playsInline
               preload="auto"
+              // 减少右键「将视频另存为」等入口（无法防止从地址栏或开发者工具获取资源）
+              onContextMenu={(e) => e.preventDefault()}
               {...WECHAT_X5_VIDEO_PROPS}
             >
               {/* 背景视频走 CDN，减轻源站压力并利于微信等环境稳定拉流 */}

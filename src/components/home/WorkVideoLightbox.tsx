@@ -112,9 +112,13 @@ export function WorkVideoLightbox({ open, onClose, title, player }: Props) {
               className="work-lightbox-video"
               src={videoSrc}
               controls
+              // 隐藏浏览器原生控件中的「下载」等项，并降低右键另存为入口（无法杜绝抓包）
+              controlsList="nodownload"
+              disablePictureInPicture
               playsInline
               preload="metadata"
               aria-label={`${title} 视频`}
+              onContextMenu={(e) => e.preventDefault()}
               {...WECHAT_X5_VIDEO_PROPS}
             />
           ) : (
