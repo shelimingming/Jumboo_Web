@@ -472,7 +472,8 @@ h2 {
 .reveal {
   opacity: 0;
   transform: translateY(60px) scale(0.96);
-  transition: all 1.2s var(--ease-out-expo);
+  /* 中文注释：卡片/区块浮现动画加速，避免“像卡住了一样过会才出现” */
+  transition: all 0.55s var(--ease-out-expo);
   will-change: transform, opacity;
 }
 
@@ -482,10 +483,11 @@ h2 {
 }
 
 /* 交错浮现 */
-.delay-1 { transition-delay: 0.1s; }
-.delay-2 { transition-delay: 0.2s; }
-.delay-3 { transition-delay: 0.3s; }
-.delay-4 { transition-delay: 0.4s; }
+/* 中文注释：交错延迟同步缩短，保证点击/滚动时响应更“立刻” */
+.delay-1 { transition-delay: 0.04s; }
+.delay-2 { transition-delay: 0.08s; }
+.delay-3 { transition-delay: 0.12s; }
+.delay-4 { transition-delay: 0.16s; }
 
 /* --- 作品网格 --- */
 .works-head {
@@ -1098,15 +1100,13 @@ h2 {
   text-align: left;
 }
 
-/* 合作区引导文案：与作品区说明色值、字号体系对齐；整句单行，避免「聊聊」被拆开 */
+/* 合作区引导文案：与作品区说明色值、字号体系对齐；窄屏多行换行，避免整句 nowrap 导致横向拖拽 */
 .coop-lead {
   margin: 0;
   max-width: 100%;
-  white-space: nowrap;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
   font-family: var(--font-literata), "Songti SC", "Noto Serif SC", serif;
   font-size: clamp(1.05rem, 2.2vw, 1.12rem);
   line-height: 1.7;
