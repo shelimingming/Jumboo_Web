@@ -75,6 +75,17 @@
       "titleEn": "Commercial Films",
       "works": [
         {
+          "id": "iqiyi-16th-anniversary",
+          "title": "Happy Birthday to IQiYi",
+          "subtitle": "波普撞色碰撞贴画拼贴，以先锋艺术视角，开启爱奇艺十六周年盛典时刻。",
+          "coverClass": "cover-1",
+          "delayClass": "delay-1",
+          "coverImage": "https://cdn.xyfit.top/Jumboo/work/爱奇艺16周年.jpg",
+          "player": {
+            "videoSrc": "https://cdn.xyfit.top/Jumboo/work/爱奇艺16周年.mp4"
+          }
+        },
+        {
           "id": "yangzhou-iqiyi-park",
           "title": "扬州爱奇艺乐园",
           "subtitle": "爱奇艺乐园官方AI宣传视频，参与爱奇艺尖叫之夜等线下活动，大屏轮播，官号粉丝增长100%+",
